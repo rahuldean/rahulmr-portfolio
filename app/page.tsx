@@ -1,6 +1,6 @@
 'use client'
 import { motion } from 'motion/react'
-import { XIcon } from 'lucide-react'
+import { XIcon, Camera, Share2, Brain, Play, type LucideIcon } from 'lucide-react'
 import { Spotlight } from '@/components/ui/spotlight'
 import { Magnetic } from '@/components/ui/magnetic'
 import {
@@ -18,6 +18,8 @@ import {
   BLOG_POSTS,
   EMAIL,
   SOCIAL_LINKS,
+  type Project,
+  type ProjectLink,
 } from './data'
 
 const VARIANTS_CONTAINER = {
@@ -89,6 +91,41 @@ function ProjectVideo({ src }: ProjectVideoProps) {
   )
 }
 
+const PROJECT_ICONS: Record<string, LucideIcon> = {
+  camera: Camera,
+  'share-2': Share2,
+  brain: Brain,
+  play: Play,
+}
+
+function ProjectThumbnail({ project }: { project: Project }) {
+  if (project.image) {
+    return (
+      <img
+        src={project.image}
+        alt={project.name}
+        className="h-14 w-14 shrink-0 rounded-xl object-cover"
+      />
+    )
+  }
+
+  if (project.video) {
+    return (
+      <div className="h-14 w-14 shrink-0 overflow-hidden rounded-xl">
+        <ProjectVideo src={project.video} />
+      </div>
+    )
+  }
+
+  const Icon = PROJECT_ICONS[project.icon]
+
+  return (
+    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
+      {Icon && <Icon className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />}
+    </div>
+  )
+}
+
 function MagneticSocialLink({
   children,
   link,
@@ -140,23 +177,31 @@ export default function Personal() {
         <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
           {PROJECTS.map((project) => (
             <div key={project.name} className="py-4 first:pt-0 last:pb-0">
-              {project.video && (
-                <div className="relative mb-3 rounded-xl bg-zinc-100/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
-                  <ProjectVideo src={project.video} />
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <ProjectThumbnail project={project} />
+                  <span className="font-[450] text-zinc-900 dark:text-zinc-50">{project.name}</span>
                 </div>
-              )}
-              <div className="flex items-baseline justify-between gap-2">
-                <a
-                  className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50"
-                  href={project.link}
-                  target="_blank"
-                >
-                  {project.name}
-                  <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
-                </a>
                 <span className="shrink-0 text-xs text-zinc-400 dark:text-zinc-500">{project.year}</span>
               </div>
-              <p className="mt-1 text-sm leading-relaxed text-zinc-500 text-justify dark:text-zinc-400">
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {project.links.map((l: ProjectLink) => (
+                  <a
+                    key={l.label}
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`w-fit rounded-full px-3 py-1 text-xs font-medium transition-opacity hover:opacity-80 ${
+                      l.label === 'Demo'
+                        ? 'bg-blue-500 text-white dark:bg-blue-600'
+                        : 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
+                    }`}
+                  >
+                    {l.label}
+                  </a>
+                ))}
+              </div>
+              <p className="mt-2 text-sm leading-relaxed text-justify text-zinc-500 dark:text-zinc-400">
                 {project.description}
               </p>
               <span className="mt-2 inline-block rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">

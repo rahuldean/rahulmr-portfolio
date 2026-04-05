@@ -3,13 +3,20 @@ export const TITLE = 'Staff Software Engineer'
 export const SUMMARY =
   'Building AI-powered data platforms and distributed infrastructure. Currently architecting agentic systems, semantic layers, and MLOps pipelines at the intersection of reliability and intelligence.'
 
-type Project = {
+export type ProjectLink = {
+  label: string
+  href: string
+}
+
+export type Project = {
   name: string
   description: string
-  link: string
+  links: ProjectLink[]
   tag: string
   year: string
+  icon: string
   video?: string
+  image?: string
   id: string
 }
 
@@ -39,36 +46,49 @@ export const PROJECTS: Project[] = [
     name: 'Property Inspector API',
     description:
       'Open source vision ML service that analyzes property photos and returns structured inspection reports. Deployed on GCP Cloud Run with Terraform IaC, GitHub Actions CI/CD, and LiteLLM model-agnostic routing (Claude + Gemini).',
-    link: 'https://github.com/rahuldean/property-inspector',
+    links: [
+      { label: 'Github', href: 'https://github.com/rahuldean/property-inspector' },
+      { label: 'Demo', href: 'https://github.com/rahuldean/property-inspector' },
+    ],
     tag: 'GCP · Go · Open Source',
     year: '2025',
+    icon: 'camera',
     id: 'project1',
   },
   {
     name: 'Archy',
     description:
       'iOS application (MVP) for sending and receiving referrals for products, services, and recommendations. Built a real-time referral graph with SocketIO and a Redis-backed NodeJS API on Google Compute Engine.',
-    link: 'https://www.youtube.com/watch?v=V3IAef1WsAw',
+    links: [
+      { label: 'Demo', href: 'https://www.youtube.com/watch?v=V3IAef1WsAw' },
+    ],
     tag: 'Swift · NodeJS · GCE',
     year: '2019',
+    icon: 'share-2',
     id: 'project2',
   },
   {
     name: 'Handwritten Number Synthesis via GAN',
     description:
       'Deep neural network that synthesizes handwritten numbers using Generative Adversarial Networks. Trained on the MNIST database using Keras and TensorFlow on Google Compute Engine.',
-    link: 'https://onedrive.live.com/:p:/g/personal/AFEBC0B85CC8D9CE/s!As7ZyFy4wOuvgQqeDlvgzY58FDc2?resid=AFEBC0B85CC8D9CE!138&ithint=file%2Cpptx&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3AvcyFBczdaeUZ5NHdPdXZnUXFlRGx2Z3pZNThGRGMy',
+    links: [
+      { label: 'Presentation', href: 'https://onedrive.live.com/:p:/g/personal/AFEBC0B85CC8D9CE/s!As7ZyFy4wOuvgQqeDlvgzY58FDc2?resid=AFEBC0B85CC8D9CE!138&ithint=file%2Cpptx&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3AvcyFBczdaeUZ5NHdPdXZnUXFlRGx2Z3pZNThGRGMy' },
+    ],
     tag: 'Python · TensorFlow · GAN',
     year: '2018',
+    icon: 'brain',
     id: 'project3',
   },
   {
     name: 'Gifsy',
     description:
       'GIF discovery and sharing platform built during tenure at Microsoft. Largest collection of curated GIFs with fast search and browsing experience.',
-    link: 'https://www.amazon.com/Gifsy-latest-viral-animated-images/dp/B01GLXSMIQ',
+    links: [
+      { label: 'App', href: 'https://www.amazon.com/Gifsy-latest-viral-animated-images/dp/B01GLXSMIQ' },
+    ],
     tag: 'Microsoft · Web',
     year: '2016',
+    icon: 'play',
     id: 'project4',
   },
 ]
