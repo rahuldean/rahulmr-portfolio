@@ -3,6 +3,15 @@ export const TITLE = 'Staff Software Engineer'
 export const SUMMARY =
   'Building AI-powered data platforms and distributed infrastructure. Currently architecting agentic systems, semantic layers, and MLOps pipelines at the intersection of reliability and intelligence.'
 
+export const SKILLS = [
+  'Go', 'Python', 'TypeScript', 'Swift',
+  'Next.js', 'React', 'Node.js', 'FastAPI',
+  'LLM Orchestration', 'LiteLLM', 'Agentic Systems', 'MLOps',
+  'PostgreSQL', 'BigQuery', 'Redis', 'MongoDB',
+  'GCP', 'Docker', 'Terraform', 'GitHub Actions',
+  'Distributed Systems', 'Data Pipelines', 'Semantic Layer', 'API Design',
+]
+
 export type ProjectLink = {
   label: string
   href: string

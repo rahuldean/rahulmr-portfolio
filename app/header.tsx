@@ -1,7 +1,27 @@
 'use client'
 import { TextEffect } from '@/components/ui/text-effect'
 import Link from 'next/link'
-import { NAME, TITLE, SUMMARY } from './data'
+import { NAME, TITLE, SUMMARY, SKILLS } from './data'
+
+function SkillsMarquee() {
+  // duplicate so the second copy seamlessly follows the first
+  const items = [...SKILLS, ...SKILLS]
+
+  return (
+    <div className="mt-4 overflow-hidden">
+      <div className="flex w-max animate-marquee gap-2">
+        {items.map((skill, i) => (
+          <span
+            key={i}
+            className="whitespace-nowrap rounded-md bg-zinc-100 px-2 py-0.5 text-xs text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"
+          >
+            {skill}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export function Header() {
   return (
@@ -19,6 +39,7 @@ export function Header() {
       >
         {SUMMARY}
       </TextEffect>
+      <SkillsMarquee />
     </header>
   )
 }
