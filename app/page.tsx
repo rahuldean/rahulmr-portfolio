@@ -1,7 +1,6 @@
 'use client'
 import { motion } from 'motion/react'
-import { XIcon, Camera, Share2, Brain, Play, type LucideIcon } from 'lucide-react'
-import { Spotlight } from '@/components/ui/spotlight'
+import { XIcon, Camera, Share2, Brain, Play, Briefcase, type LucideIcon } from 'lucide-react'
 import { Magnetic } from '@/components/ui/magnetic'
 import {
   MorphingDialog,
@@ -204,9 +203,13 @@ export default function Personal() {
               <p className="mt-2 text-sm leading-relaxed text-justify text-zinc-500 dark:text-zinc-400">
                 {project.description}
               </p>
-              <span className="mt-2 inline-block rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-                {project.tag}
-              </span>
+              <div className="mt-2 flex flex-wrap gap-1">
+                {project.tag.split(', ').map((tech) => (
+                  <span key={tech} className="cursor-default rounded-md bg-zinc-100 px-2 py-0.5 text-xs text-zinc-500 transition-colors hover:bg-zinc-900 hover:text-white dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-100 dark:hover:text-zinc-900">
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -215,38 +218,32 @@ export default function Personal() {
       <motion.section
         variants={VARIANTS_SECTION}
         transition={TRANSITION_SECTION}
-        className="rounded-2xl border border-zinc-100 bg-zinc-50/60 px-5 py-4 dark:border-zinc-800 dark:bg-zinc-900/40"
+        className="rounded-2xl bg-zinc-50 px-5 py-4 dark:bg-zinc-900/40"
       >
-        <h3 className="mb-4 text-sm font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Work Experience</h3>
-        <div className="flex flex-col space-y-2">
+        <h3 className="mb-5 text-lg font-medium">Work Experience</h3>
+        <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
           {WORK_EXPERIENCE.map((job) => (
-            <a
-              className="relative overflow-hidden rounded-xl bg-zinc-200/30 p-[1px] dark:bg-zinc-700/30"
-              href={job.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              key={job.id}
-            >
-              <Spotlight
-                className="from-zinc-900 via-zinc-800 to-zinc-700 blur-2xl dark:from-zinc-100 dark:via-zinc-200 dark:to-zinc-50"
-                size={64}
-              />
-              <div className="relative h-full w-full rounded-[11px] bg-white px-4 py-3 dark:bg-zinc-950">
-                <div className="relative flex w-full flex-row justify-between">
-                  <div>
-                    <h4 className="text-sm font-normal dark:text-zinc-100">
-                      {job.title}
-                    </h4>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                      {job.company}
-                    </p>
+            <div key={job.id} className="py-4 first:pt-0 last:pb-0">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
+                    <Briefcase className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
                   </div>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                    {job.start} - {job.end}
-                  </p>
+                  <a
+                    href={job.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-[450] text-zinc-900 dark:text-zinc-50 hover:underline"
+                  >
+                    {job.company}
+                  </a>
                 </div>
+                <span className="shrink-0 text-xs text-zinc-400 dark:text-zinc-500">
+                  {job.start} - {job.end}
+                </span>
               </div>
-            </a>
+              <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{job.title}</p>
+            </div>
           ))}
         </div>
       </motion.section>

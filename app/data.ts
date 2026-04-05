@@ -43,14 +43,14 @@ type SocialLink = {
 
 export const PROJECTS: Project[] = [
   {
-    name: 'Property Inspector API',
+    name: 'AI Property Inspector API',
     description:
-      'Open source vision ML service that analyzes property photos and returns structured inspection reports. Deployed on GCP Cloud Run with Terraform IaC, GitHub Actions CI/CD, and LiteLLM model-agnostic routing (Claude + Gemini).',
+      'Open source service that analyzes property photos and returns structured inspection reports. Deployed on GCP Cloud Run with Terraform IaC, GitHub Actions CI/CD, and LiteLLM model-agnostic routing (Claude + Gemini).',
     links: [
       { label: 'Github', href: 'https://github.com/rahuldean/property-inspector' },
       { label: 'Demo', href: 'https://github.com/rahuldean/property-inspector' },
     ],
-    tag: 'GCP · Go · Open Source',
+    tag: 'Go, Docker, LiteLLM, Gemini (LLM), Claude (LLM), GCP Cloud Run, GCP Artifact Registry, GCP BigQuery, GCP Secret Manager, GCP Workload Identity, Terraform, GitHub Actions, NextJS',
     year: '2025',
     icon: 'camera',
     id: 'project1',
@@ -62,7 +62,7 @@ export const PROJECTS: Project[] = [
     links: [
       { label: 'Demo', href: 'https://www.youtube.com/watch?v=V3IAef1WsAw' },
     ],
-    tag: 'Swift · NodeJS · GCE',
+    tag: 'Swift, iOS, Node.js, Express, SocketIO, MongoDB, Redis, Docker, Google Compute Engine',
     year: '2019',
     icon: 'share-2',
     id: 'project2',
@@ -74,7 +74,7 @@ export const PROJECTS: Project[] = [
     links: [
       { label: 'Presentation', href: 'https://onedrive.live.com/:p:/g/personal/AFEBC0B85CC8D9CE/s!As7ZyFy4wOuvgQqeDlvgzY58FDc2?resid=AFEBC0B85CC8D9CE!138&ithint=file%2Cpptx&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3AvcyFBczdaeUZ5NHdPdXZnUXFlRGx2Z3pZNThGRGMy' },
     ],
-    tag: 'Python · TensorFlow · GAN',
+    tag: 'Python, TensorFlow, Keras, GAN, MNIST, Google Compute Engine, Ubuntu',
     year: '2018',
     icon: 'brain',
     id: 'project3',
@@ -86,7 +86,7 @@ export const PROJECTS: Project[] = [
     links: [
       { label: 'App', href: 'https://www.amazon.com/Gifsy-latest-viral-animated-images/dp/B01GLXSMIQ' },
     ],
-    tag: 'Microsoft · Web',
+    tag: 'JavaScript, Web, Microsoft',
     year: '2016',
     icon: 'play',
     id: 'project4',
