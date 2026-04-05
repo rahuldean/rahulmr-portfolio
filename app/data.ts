@@ -1,8 +1,15 @@
+export const NAME = 'Rahul Malkireddy'
+export const TITLE = 'Staff Software Engineer'
+export const SUMMARY =
+  'Building AI-powered data platforms and distributed infrastructure. Currently architecting agentic systems, semantic layers, and MLOps pipelines at the intersection of reliability and intelligence.'
+
 type Project = {
   name: string
   description: string
   link: string
-  video: string
+  tag: string
+  year: string
+  video?: string
   id: string
 }
 
@@ -27,11 +34,95 @@ type SocialLink = {
   link: string
 }
 
-export const PROJECTS: Project[] = []
+export const PROJECTS: Project[] = [
+  {
+    name: 'Property Inspector API',
+    description:
+      'Open source vision ML service that analyzes property photos and returns structured inspection reports. Deployed on GCP Cloud Run with Terraform IaC, GitHub Actions CI/CD, and LiteLLM model-agnostic routing (Claude + Gemini).',
+    link: 'https://github.com/rahuldean/property-inspector',
+    tag: 'GCP · Go · Open Source',
+    year: '2025',
+    id: 'project1',
+  },
+  {
+    name: 'Archy',
+    description:
+      'iOS application (MVP) for sending and receiving referrals for products, services, and recommendations. Built a real-time referral graph with SocketIO and a Redis-backed NodeJS API on Google Compute Engine.',
+    link: 'https://www.youtube.com/watch?v=V3IAef1WsAw',
+    tag: 'Swift · NodeJS · GCE',
+    year: '2019',
+    id: 'project2',
+  },
+  {
+    name: 'Handwritten Number Synthesis via GAN',
+    description:
+      'Deep neural network that synthesizes handwritten numbers using Generative Adversarial Networks. Trained on the MNIST database using Keras and TensorFlow on Google Compute Engine.',
+    link: 'https://onedrive.live.com/:p:/g/personal/AFEBC0B85CC8D9CE/s!As7ZyFy4wOuvgQqeDlvgzY58FDc2?resid=AFEBC0B85CC8D9CE!138&ithint=file%2Cpptx&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3AvcyFBczdaeUZ5NHdPdXZnUXFlRGx2Z3pZNThGRGMy',
+    tag: 'Python · TensorFlow · GAN',
+    year: '2018',
+    id: 'project3',
+  },
+  {
+    name: 'Gifsy',
+    description:
+      'GIF discovery and sharing platform built during tenure at Microsoft. Largest collection of curated GIFs with fast search and browsing experience.',
+    link: 'https://www.amazon.com/Gifsy-latest-viral-animated-images/dp/B01GLXSMIQ',
+    tag: 'Microsoft · Web',
+    year: '2016',
+    id: 'project4',
+  },
+]
 
-export const WORK_EXPERIENCE: WorkExperience[] = []
+export const WORK_EXPERIENCE: WorkExperience[] = [
+  {
+    company: 'Frontdoor',
+    title: 'Staff Software Engineer',
+    start: '2022',
+    end: 'Present',
+    link: 'https://www.frontdoorhome.com',
+    id: 'work1',
+  },
+  {
+    company: 'Stream (acquired by Frontdoor)',
+    title: 'Cross-Platform Tech Lead',
+    start: '2019',
+    end: '2022',
+    link: 'https://www.linkedin.com/in/rahulreddym',
+    id: 'work2',
+  },
+  {
+    company: 'Code Particle',
+    title: 'Software Engineer',
+    start: '2017',
+    end: '2019',
+    link: 'https://www.linkedin.com/in/rahulreddym',
+    id: 'work3',
+  },
+  {
+    company: 'Microsoft',
+    title: 'Software Engineer',
+    start: '2015',
+    end: '2017',
+    link: 'https://www.microsoft.com',
+    id: 'work4',
+  },
+]
 
-export const BLOG_POSTS: BlogPost[] = []
+export const BLOG_POSTS: BlogPost[] = [
+  {
+    title: 'Deploying a vision ML API on GCP',
+    description: 'Architecture decisions behind the property inspector service',
+    link: '/blog/gcp-vision-api',
+    uid: 'blog-1',
+  },
+  {
+    title: 'Building reliable ML pipelines',
+    description:
+      'Structured outputs, eval loops, and drift detection in production',
+    link: '/blog/reliable-ml-pipelines',
+    uid: 'blog-2',
+  },
+]
 
 export const SOCIAL_LINKS: SocialLink[] = [
   {
