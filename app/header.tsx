@@ -1,5 +1,4 @@
 'use client'
-import { TextEffect } from '@/components/ui/text-effect'
 import Link from 'next/link'
 import { NAME, TITLE, SUMMARY, SKILLS } from './data'
 
@@ -8,7 +7,9 @@ function SkillsMarquee() {
   const items = [...SKILLS, ...SKILLS]
 
   return (
-    <div className="mt-4 overflow-hidden">
+    <div
+      className="marquee-container mt-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
+    >
       <div className="flex w-max animate-marquee gap-2">
         {items.map((skill, i) => (
           <span
@@ -30,15 +31,7 @@ export function Header() {
         {NAME}
       </Link>
       <p className="text-zinc-600 dark:text-zinc-500">{TITLE}</p>
-      <TextEffect
-        as="p"
-        preset="fade"
-        per="word"
-        className="mt-1 text-sm text-zinc-600 dark:text-zinc-400"
-        delay={0.5}
-      >
-        {SUMMARY}
-      </TextEffect>
+      <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{SUMMARY}</p>
       <SkillsMarquee />
     </header>
   )
