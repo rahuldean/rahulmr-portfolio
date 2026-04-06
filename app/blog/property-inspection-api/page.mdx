@@ -7,6 +7,8 @@ export const metadata = {
 
 Property inspections are manual, inconsistent, and produce unstructured notes that nobody can query later. I built a small open source service that takes a photo and gives back a structured list of issues: category, severity, location, confidence. This is how it works and why I made the choices I did.
 
+![Architecture diagram of the property inspection API](/inspector-api.svg)
+
 ## How it works
 
 The service is two Cloud Run containers talking to each other. A Go API server accepts image uploads, encodes them as base64 data URIs, and forwards the request to a LiteLLM proxy. The proxy routes to whichever model is configured and returns the response. The Go server parses that into a fixed JSON schema and returns it to the caller.
@@ -56,4 +58,4 @@ Prompt engineering alone does not guarantee structure. The LiteLLM call uses `re
 
 * There's no automated way to catch model quality regression yet. A regression suite of known images with expected outputs would catch drift before it reaches production. Schema enforcement catches format errors, not accuracy degradation.
 
-The repo is at github.com/rahuldean/property-inspector. Live demo at [DEMO_URL].
+The repo is at [property-inspector](https://github.com/rahuldean/property-inspector)
