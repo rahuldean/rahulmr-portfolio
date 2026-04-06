@@ -59,7 +59,7 @@ export const PROJECTS: Project[] = [
       'Open source vision ML service that analyzes property photos and returns structured inspection reports. Deployed on GCP Cloud Run with Terraform IaC, GitHub Actions CI/CD, and LiteLLM model-agnostic routing across Claude and Gemini.',
     links: [
       { label: 'Github', href: 'https://github.com/rahuldean/property-inspector' },
-      { label: 'Demo', href: 'https://github.com/rahuldean/property-inspector' },
+      { label: 'Demo', href: 'https://inspector-app-512290277927.us-east1.run.app/?token=B81D895C-C5D1-4302-96E2-4C0750EE195C&src=rahulmx.com' },
     ],
     tag: 'Go, Docker, LiteLLM, Gemini (LLM), Claude (LLM), GCP Cloud Run, GCP Artifact Registry, GCP BigQuery, GCP Secret Manager, GCP Workload Identity, Terraform, GitHub Actions, Next.js',
     year: '2025',
