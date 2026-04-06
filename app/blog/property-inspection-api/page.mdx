@@ -1,0 +1,59 @@
+export const metadata = {
+  title: 'Shipping a property inspection API',
+  date: '2026-04-05',
+  summary:
+    'How I designed and deployed an open source property inspection service: architecture decisions, infrastructure choices, and what comes next.',
+}
+
+Property inspections are manual, inconsistent, and produce unstructured notes that nobody can query later. I built a small open source service that takes a photo and gives back a structured list of issues: category, severity, location, confidence. This is how it works and why I made the choices I did.
+
+## How it works
+
+The service is two Cloud Run containers talking to each other. A Go API server accepts image uploads, encodes them as base64 data URIs, and forwards the request to a LiteLLM proxy. The proxy routes to whichever model is configured and returns the response. The Go server parses that into a fixed JSON schema and returns it to the caller.
+
+There are two endpoints. `/analyze` takes a single photo and a room name. It returns a list of issues, each with a category (wall damage, flooring, appliance, fixture), a severity, a free-text description, a location within the frame, and a confidence score between 0 and 1. `/compare` takes before and after photos and returns three lists: resolved issues, new issues, and unchanged issues.
+
+LiteLLM sits between the API and the model rather than calling Anthropic or Vertex AI directly. Swapping models is a config change, not a code change. I've switched between Claude and Gemini without touching the API server once. With models improving as fast as they are, keeping the application layer ignorant of which one is running is the right call.
+
+## Infrastructure
+
+Cloud Run is the right choice for a stateless service like this. Each request comes in, goes out. It scales to zero between requests, which matters when traffic is bursty. GKE adds cluster management overhead that doesn't buy anything here.
+
+API keys live in Secret Manager and are injected at Cloud Run runtime. They never touch the container image or the repo. Rotating a key is a new secret version, not a redeploy.
+
+Workload Identity Federation handles CI/CD auth. GitHub Actions authenticates to GCP via OIDC. There are no service account JSON key files anywhere. Key files get committed, shared, and forgotten. This eliminates the problem.
+
+Terraform provisions everything: both Cloud Run services, Artifact Registry, Secret Manager secrets, IAM bindings, and the Workload Identity pool. Rebuilding the entire setup in a new project is one `terraform apply`. If your infrastructure has more than three moving parts, it should be in Terraform.
+
+## Deploying
+
+Push to main. GitHub Actions builds both Docker images, pushes them to Artifact Registry, and deploys both Cloud Run services. Three minutes end to end.
+
+The Docker builds are multi-stage. Go compiles in a full builder image. The final image is distroless: just the binary. No shell, no package manager, nothing to exploit.
+
+A quick test of the `/analyze` endpoint:
+
+```bash
+TOKEN=$(gcloud auth print-identity-token)
+curl -X POST https://YOUR_API_URL/analyze \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "image=@kitchen.jpg" \
+  -F "room_name=Kitchen" \
+  -F "floor_unit=Unit 4B"
+```
+
+The response is a `RoomAnalysis` object with an `issues` array, a `summary` string, and an `overall_condition` field set to one of: excellent, good, fair, or poor.
+
+## Why the output schema matters
+
+The response is a fixed JSON shape. Each issue has a category, severity, description, location, and confidence score. This is not optional. A mobile app consuming this API cannot handle a response that looks different each time.
+
+Prompt engineering alone does not guarantee structure. The LiteLLM call uses `response_format` to enforce the schema at the API level. The model has to return valid JSON that matches the type. If it doesn't, the server returns an error rather than passing garbage downstream.
+
+## What's next
+
+* The `/analyze` endpoint is synchronous. The next version will use a job queue: the client sends a request, gets a job ID, and polls for the result. This is the right design for large images or multi-room batches.
+
+* There's no automated way to catch model quality regression yet. A regression suite of known images with expected outputs would catch drift before it reaches production. Schema enforcement catches format errors, not accuracy degradation.
+
+The repo is at github.com/rahuldean/property-inspector. Live demo at [DEMO_URL].

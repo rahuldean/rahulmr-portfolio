@@ -1,4 +1,4 @@
-# rahulmr portfolio
+# Rahul Portfolio
 
 Personal portfolio site built with Next.js 15, Tailwind CSS v4, and Motion.
 

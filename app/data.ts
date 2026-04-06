@@ -44,6 +44,7 @@ type BlogPost = {
   description: string
   link: string
   uid: string
+  published?: boolean
 }
 
 type SocialLink = {
@@ -144,10 +145,11 @@ export const WORK_EXPERIENCE: WorkExperience[] = [
 
 export const BLOG_POSTS: BlogPost[] = [
   {
-    title: 'Deploying a vision ML API on GCP',
-    description: 'Architecture decisions behind the property inspector service',
-    link: '/blog/gcp-vision-api',
+    title: 'Shipping a property inspection API',
+    description: 'Architecture decisions, tradeoffs, and what I would change',
+    link: '/blog/property-inspection-api',
     uid: 'blog-1',
+    published: true,
   },
   {
     title: 'Building reliable ML pipelines',
@@ -169,4 +171,4 @@ export const SOCIAL_LINKS: SocialLink[] = [
   },
 ]
 
-export const EMAIL = 'hi [at] rahulmr.dev'
+export const EMAIL = 'hi [at] rahulmx.com'

@@ -2,6 +2,9 @@
 import { TextMorph } from '@/components/ui/text-morph'
 import { ScrollProgress } from '@/components/ui/scroll-progress'
 import { useEffect, useState } from 'react'
+import { ArrowLeftIcon } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { BLOG_POSTS } from '../data'
 
 function CopyButton() {
   const [text, setText] = useState('Copy')
@@ -28,6 +31,38 @@ function CopyButton() {
   )
 }
 
+function PostHeader() {
+  const pathname = usePathname()
+  const router = useRouter()
+  const slug = pathname.split('/').pop()
+  const post = BLOG_POSTS.find((p) => p.link === `/blog/${slug}`)
+
+  function handleBack() {
+    if (window.history.length > 1) {
+      router.back()
+    } else {
+      router.push('/')
+    }
+  }
+
+  return (
+    <div className="mb-8 mt-24">
+      <button
+        onClick={handleBack}
+        className="mb-4 inline-flex items-center gap-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300"
+      >
+        <ArrowLeftIcon className="h-3.5 w-3.5" />
+        Back
+      </button>
+      {post && (
+        <h1 className="text-2xl font-medium text-zinc-900 dark:text-zinc-50">
+          {post.title}
+        </h1>
+      )}
+    </div>
+  )
+}
+
 export default function LayoutBlogPost({
   children,
 }: {
@@ -46,8 +81,12 @@ export default function LayoutBlogPost({
       <div className="absolute right-4 top-24">
         <CopyButton />
       </div>
-      <main className="prose prose-gray mt-24 pb-20 prose-h4:prose-base dark:prose-invert prose-h1:text-xl prose-h1:font-medium prose-h2:mt-12 prose-h2:scroll-m-20 prose-h2:text-lg prose-h2:font-medium prose-h3:text-base prose-h3:font-medium prose-h4:font-medium prose-h5:text-base prose-h5:font-medium prose-h6:text-base prose-h6:font-medium prose-strong:font-medium">
-        {children}
+
+      <main className="pb-20">
+        <PostHeader />
+        <div className="prose prose-gray prose-h4:prose-base dark:prose-invert prose-h1:text-xl prose-h1:font-medium prose-h2:mt-12 prose-h2:scroll-m-20 prose-h2:text-lg prose-h2:font-medium prose-h3:text-base prose-h3:font-medium prose-h4:font-medium prose-h5:text-base prose-h5:font-medium prose-h6:text-base prose-h6:font-medium prose-strong:font-medium">
+          {children}
+        </div>
       </main>
     </>
   )

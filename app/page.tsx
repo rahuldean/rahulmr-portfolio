@@ -200,7 +200,7 @@ export default function Personal() {
                   </a>
                 ))}
               </div>
-              <p className="mt-3 text-base leading-relaxed text-justify text-zinc-500 sm:text-sm dark:text-zinc-400">
+              <p className="mt-3 text-base leading-relaxed text-justify text-zinc-700 sm:text-sm dark:text-zinc-300">
                 {project.description}
               </p>
               <div className="mt-3 flex flex-wrap gap-1">
@@ -257,12 +257,19 @@ export default function Personal() {
         <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
           {BLOG_POSTS.map((post) => (
             <div key={post.uid} className="flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0">
-              <div>
-                <p className="text-base font-[450] text-zinc-400 sm:text-sm dark:text-zinc-500">{post.title}</p>
-                <p className="mt-0.5 text-sm text-zinc-400 sm:text-xs dark:text-zinc-600">{post.description}</p>
-              </div>
+              {post.published ? (
+                <a href={post.link} className="group min-w-0">
+                  <p className="text-base font-[450] text-zinc-700 group-hover:underline sm:text-sm dark:text-zinc-300">{post.title}</p>
+                  <p className="mt-0.5 text-sm text-zinc-400 sm:text-xs dark:text-zinc-600">{post.description}</p>
+                </a>
+              ) : (
+                <div>
+                  <p className="text-base font-[450] text-zinc-400 sm:text-sm dark:text-zinc-500">{post.title}</p>
+                  <p className="mt-0.5 text-sm text-zinc-400 sm:text-xs dark:text-zinc-600">{post.description}</p>
+                </div>
+              )}
               <span className="mt-0.5 shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
-                soon
+                {post.published ? 'read' : 'soon'}
               </span>
             </div>
           ))}

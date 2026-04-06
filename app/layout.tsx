@@ -13,7 +13,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://rahulmr.dev/'),
+  metadataBase: new URL('https://rahulmx.com/'),
   alternates: {
     canonical: '/'
   },
