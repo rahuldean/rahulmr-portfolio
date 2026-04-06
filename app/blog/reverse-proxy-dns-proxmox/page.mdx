@@ -1,0 +1,71 @@
+export const metadata = {
+  title: 'Self-hosting a reverse proxy and internal DNS on Proxmox',
+  date: '2026-04-06',
+  summary:
+    'How the DNS and reverse proxy containers work together in my homelab to handle internal service discovery, local TLS, and split DNS.',
+}
+
+Running a reverse proxy and DNS server together is one of those things that seems like extra complexity until you have more than three services. After that it becomes necessary. This is how I set it up on Proxmox and what the traffic flow looks like end to end.
+
+## The problem without this setup
+
+Without internal DNS, accessing a homelab service means remembering an IP and port: `192.168.1.20:8096` for Jellyfin, `192.168.1.20:9000` for something else. Adding TLS means getting certs per service and managing them separately. None of this scales past a few services.
+
+The goal is to reach any service by hostname over HTTPS, with a valid cert, without anything leaving the local network.
+
+## Two containers, one job
+
+The setup uses two LXC containers:
+
+- **AdGuard Home** at `192.168.1.53`: handles DNS for the local network
+- **Caddy** at `192.168.1.10`: handles TLS termination and reverse proxying
+
+The router's DHCP server hands out `192.168.1.53` as the DNS server for every device on the network. When a device looks up `jellyfin.home`, AdGuard returns `192.168.1.10`. The device connects to Caddy, which terminates TLS and proxies the request to wherever Jellyfin is actually running.
+
+## Split DNS
+
+Split DNS means that internal hostnames resolve differently depending on whether you are inside or outside the network. From inside the network, `jellyfin.home` resolves to the Caddy container. From outside, the hostname does not resolve at all (or resolves to nothing useful).
+
+In AdGuard Home this is a list of custom DNS rewrites:
+
+```
+*.home -> 192.168.1.10
+```
+
+That single wildcard rule sends everything under `.home` to the reverse proxy. Adding a new service means adding a Caddy config block and nothing else. No new DNS records.
+
+## TLS with local certs
+
+Caddy handles TLS via Let's Encrypt with a DNS challenge. The DNS challenge does not require a public-facing server, it only requires that you can create TXT records in your domain's public DNS zone. Caddy creates the record, Let's Encrypt verifies it, and the cert is issued.
+
+A wildcard cert for `*.internal.yourdomain.com` covers all services. Caddy renews it automatically before it expires. The cert is valid and trusted by browsers, not self-signed.
+
+The Caddy config for a service looks like this:
+
+```
+jellyfin.internal.yourdomain.com {
+  reverse_proxy 192.168.1.20:8096
+}
+```
+
+That is the entire config for a new service. Caddy handles the TLS handshake, the cert, and the proxy.
+
+## Why AdGuard over plain CoreDNS or dnsmasq
+
+AdGuard Home has a web UI that makes it easy to see what DNS queries are happening across the network. It also handles ad and tracker blocking at the DNS level as a side effect. CoreDNS is more powerful but requires writing config files for things that AdGuard exposes as checkboxes.
+
+For a homelab the tradeoff is clear. The visibility alone is worth it.
+
+## What the traffic flow looks like
+
+1. Device queries DNS for `service.home`
+2. AdGuard returns `192.168.1.10` (the Caddy LXC)
+3. Device opens HTTPS connection to `192.168.1.10`
+4. Caddy matches the hostname, terminates TLS using the wildcard cert
+5. Caddy proxies the request to the service's internal IP and port
+6. Response comes back through Caddy to the device
+
+Nothing external is involved after the initial cert issuance. The whole path stays on the local network.
+
+## Links
+- Github repo: [labmox](https://github.com/rahuldean/labmox)

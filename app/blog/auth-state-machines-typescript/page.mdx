@@ -1,0 +1,80 @@
+export const metadata = {
+  title: 'Modeling login flows as state machines in TypeScript',
+  date: '2026-04-06',
+  summary:
+    'Why I built auth-machines as a TypeScript state machine library instead of writing conditional auth logic, and what it looks like in practice.',
+}
+
+Auth flows are not complicated, but they have enough edge cases to cause problems when the logic is spread across components, context providers, and API calls. I built auth-machines to handle email/password plus MFA login as an explicit state machine. This is why it ended up being the right abstraction and what the implementation looks like.
+
+## The problem with ad-hoc auth logic
+
+A typical login flow has more states than it looks like at first:
+
+- Not authenticated
+- Submitting credentials
+- Credentials accepted, MFA required
+- Submitting MFA code
+- Authenticated
+- Error states for each step (wrong password, expired code, rate limited, network failure)
+
+Without a state machine, this ends up as a collection of booleans: `isLoading`, `requiresMfa`, `isAuthenticated`, `error`. The combinations multiply fast. `isLoading` being true while `isAuthenticated` is also true should not be possible, but nothing enforces that.
+
+A state machine makes invalid states unrepresentable. If you are in the `authenticated` state, there is no `isLoading` flag to accidentally set to true.
+
+## What auth-machines does
+
+The library exposes a factory function that returns a state machine for the auth workflow. The machine has named states and typed events. Transitions between states are explicit. Side effects (API calls) are attached to transitions, not scattered across component lifecycle hooks.
+
+The states:
+
+```
+idle -> submitting_credentials -> mfa_required -> submitting_mfa -> authenticated
+                                                                   
+Each state also transitions to an error state with a typed reason.
+```
+
+You drive the machine by sending events:
+
+```typescript
+machine.send({ type: 'SUBMIT_CREDENTIALS', email, password })
+machine.send({ type: 'SUBMIT_MFA_CODE', code })
+machine.send({ type: 'RETRY' })
+```
+
+The machine handles what is valid in each state. Sending `SUBMIT_MFA_CODE` while in `idle` does nothing. This means you do not need to guard against it in the calling code.
+
+## Typed states and narrowing
+
+Each state has a typed context object. The shape of context changes depending on which state you are in. In `mfa_required` the context includes the partial session token from the first auth step. In `authenticated` it includes the full session. TypeScript narrows the type correctly at each state check.
+
+```typescript
+if (state.matches('authenticated')) {
+  // state.context.session is typed and present here
+  console.log(state.context.session.userId)
+}
+```
+
+You never access `session.userId` in a state where it does not exist, and TypeScript will tell you at compile time if you try.
+
+## Attaching the API calls
+
+The transitions that need to call an API take a service function as configuration. The machine does not import fetch or any specific HTTP client. You pass in the functions that handle credentials and MFA verification, which makes the machine testable without a network.
+
+```typescript
+const machine = createAuthMachine({
+  submitCredentials: (email, password) => api.login(email, password),
+  submitMfaCode: (token, code) => api.verifyMfa(token, code),
+})
+```
+
+In tests, you swap those functions for stubs that return the states you want to test. The machine logic is fully tested without mocking network requests.
+
+## Why a library and not just a pattern
+
+The state machine logic is the same across every app that needs email/password plus MFA. Copying the pattern across projects means maintaining it in multiple places. Packaging it as a library means one place to fix bugs and add features, with proper versioning.
+
+The library is currently used internally in a couple of applications. The plan is to publish it to npm once the API has been stable for a while.
+
+## Links
+- Github repo: [labmox](https://github.com/rahuldean/labmox)

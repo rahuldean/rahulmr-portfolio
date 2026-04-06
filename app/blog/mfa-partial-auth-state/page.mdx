@@ -1,0 +1,79 @@
+export const metadata = {
+  title: 'The MFA flow nobody talks about: handling partial auth state',
+  date: '2026-04-06',
+  summary:
+    'What happens to application state between password verification and MFA completion, and how auth-machines handles it without leaking session info.',
+}
+
+Most auth writeups cover the happy path: user enters password, enters MFA code, gets a session. What they skip is the state the app is in between those two steps. That in-between state is where bugs live and where security problems show up if you are not careful.
+
+## What partial auth state is
+
+After a user submits valid credentials but before they complete MFA, the server knows the credentials were correct. The user is not authenticated yet. The server has to communicate enough information to the client to continue the flow without treating the user as logged in.
+
+The typical implementation is a short-lived partial token. The server returns something like:
+
+```json
+{
+  "status": "mfa_required",
+  "partial_token": "eyJ...",
+  "expires_in": 300
+}
+```
+
+The partial token is not a session. It cannot be used to access protected resources. It is only valid for the MFA verification endpoint. After MFA succeeds, it is exchanged for a real session token.
+
+## The client-side problem
+
+On the client, you now have a piece of state that is not a session but needs to be kept around until the MFA step completes. If you store it carelessly, a few things can go wrong:
+
+- The user closes the tab and the partial token is gone. They have to start over.
+- The partial token ends up in a place where other parts of the app can read it and act as if auth is complete.
+- The partial token expires before MFA is submitted and the error is not handled clearly.
+
+With boolean flags this state is usually held in component state or a context provider. That works until it does not, and when it breaks it is often a security issue or a confusing user experience.
+
+## How auth-machines handles it
+
+The machine has a dedicated `mfa_required` state. When the server returns `mfa_required` with a partial token, the machine transitions to this state and stores the partial token in the state context.
+
+The context type for `mfa_required` is:
+
+```typescript
+type MfaRequiredContext = {
+  partialToken: string
+  expiresAt: number
+}
+```
+
+The partial token only exists in this state. It is not accessible in `idle`, `submitting_credentials`, `authenticated`, or any error state. TypeScript enforces this because the context type narrows per state.
+
+When `SUBMIT_MFA_CODE` is sent, the machine reads the partial token from context, sends it with the MFA code to the verification endpoint, and transitions to `authenticated` on success. The partial token is dropped from context at that point.
+
+## Expiry handling
+
+The machine checks token expiry before sending the MFA code. If the partial token has expired, the machine transitions to an `expired` error state rather than making an API call that will fail.
+
+The error state carries enough information to show the user a clear message and offer a way to restart the flow from the beginning. No silent failures, no generic error messages.
+
+```typescript
+if (Date.now() > context.expiresAt) {
+  return { type: 'ERROR', reason: 'partial_token_expired' }
+}
+```
+
+## What this looks like in a UI
+
+The state machine drives the UI directly. Each state maps to a different view:
+
+- `idle`: login form
+- `submitting_credentials`: login form with loading state
+- `mfa_required`: MFA code input form
+- `submitting_mfa`: MFA form with loading state
+- `authenticated`: redirect to the app
+- error states: error message with appropriate recovery action
+
+No boolean flags, no checking `isLoading && requiresMfa && !isAuthenticated` to figure out which screen to show. The current state name tells you exactly where you are.
+
+## Links
+- Github repo: [labmox](https://github.com/rahuldean/labmox)

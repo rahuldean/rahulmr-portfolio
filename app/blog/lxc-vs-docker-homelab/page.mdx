@@ -1,0 +1,48 @@
+export const metadata = {
+  title: 'Why I stopped using manual Docker installs and moved to LXC containers',
+  date: '2026-04-06',
+  summary:
+    'A practical look at running homelab services in LXC containers instead of Docker on bare metal, and where Docker still makes sense inside the setup.',
+}
+
+For a long time my homelab was just Docker Compose files on a bare Ubuntu server. It worked until it did not. A botched upgrade wiped the Docker daemon config, and I spent a weekend recovering things from memory and half-documented notes. That was enough to rethink the setup.
+
+I moved to Proxmox and started running services in LXC containers. Docker did not go away entirely, but it stopped being the outermost layer.
+
+## What LXC actually is
+
+LXC is OS-level virtualization. You get a container that shares the host kernel but has its own filesystem, network interface, and process namespace. It is lighter than a VM because there is no guest OS kernel, but more isolated than a Docker container because each LXC has its own init process and full userspace.
+
+In Proxmox, LXC containers are first-class objects. You can snapshot them, back them up with the built-in backup scheduler, and restore to a previous state in about 30 seconds.
+
+## The split that works for me
+
+Right now the setup looks like this:
+
+- Each infrastructure service (reverse proxy, DNS, NAS) gets its own LXC container.
+- Application services run as Docker Compose stacks inside a single Docker-host LXC.
+
+The infrastructure services are in their own containers because they have different uptime requirements and I want to snapshot them independently. Taking a snapshot of the Caddy container before changing the TLS config takes a few seconds and gives a clean rollback if something breaks.
+
+The application services are in Docker because Compose is a good fit for multi-container apps that need to talk to each other. Running them inside an LXC rather than directly on the host means I can snapshot the Docker host before a major update and not worry about the rest of the homelab.
+
+## Snapshots are the real reason
+
+Docker volumes can be backed up, but it requires scripting around the container lifecycle, dumping volumes to tarballs, and hoping you got the order right. It works but it is manual work every time.
+
+Proxmox snapshots are atomic. One click (or one API call) and the entire container state including the filesystem is captured. Rolling back is the same operation in reverse. For a homelab where I am frequently trying things that might break, this changes the risk calculus completely.
+
+## Resource isolation
+
+On bare metal, a runaway process in one container can eat all the CPU and starve everything else. LXC containers in Proxmox get CPU and memory limits set at provision time. The DNS container gets 512MB and one core. Even if something goes wrong inside it, the rest of the homelab keeps running.
+
+With Docker on bare metal you can set resource limits per container, but they are easy to forget and there is no central place to see what everything is allocated. In Proxmox the summary page shows resource allocation across all containers in one view.
+
+## Where Docker still wins
+
+Docker Compose is still the right tool for running an application with multiple services that need to share a network. The alternative would be separate LXC containers with manual networking between them, which adds complexity without buying anything.
+
+The pattern I settled on: LXC for anything that needs independent lifecycle management or strong isolation, Docker Compose for applications that are logically one thing but need multiple processes.
+
+## Links
+- Github repo: [labmox](https://github.com/rahuldean/labmox)

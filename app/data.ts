@@ -152,6 +152,41 @@ export const BLOG_POSTS: BlogPost[] = [
     published: true,
   },
   {
+    title: 'My homelab runs on Proxmox and OpenTofu, here is how I set it up',
+    description: 'IaC for a reproducible homelab: LXC containers, OpenTofu, and why not Terraform',
+    link: '/blog/proxmox-opentofu-homelab',
+    uid: 'blog-3',
+    published: true,
+  },
+  {
+    title: 'Why I stopped using manual Docker installs and moved to LXC containers',
+    description: 'How LXC containers changed the way I manage homelab services and why Docker still has a place',
+    link: '/blog/lxc-vs-docker-homelab',
+    uid: 'blog-4',
+    published: true,
+  },
+  {
+    title: 'Self-hosting a reverse proxy and internal DNS on Proxmox',
+    description: 'Caddy, AdGuard Home, split DNS, and local TLS for internal services',
+    link: '/blog/reverse-proxy-dns-proxmox',
+    uid: 'blog-5',
+    published: true,
+  },
+  {
+    title: 'Modeling login flows as state machines in TypeScript',
+    description: 'Why I built auth-machines and what explicit state machines buy you in auth flows',
+    link: '/blog/auth-state-machines-typescript',
+    uid: 'blog-6',
+    published: true,
+  },
+  {
+    title: 'The MFA flow nobody talks about: handling partial auth state',
+    description: 'What lives between password verification and MFA completion, and how to handle it cleanly',
+    link: '/blog/mfa-partial-auth-state',
+    uid: 'blog-7',
+    published: true,
+  },
+  {
     title: 'Building reliable ML pipelines',
     description:
       'Structured outputs, eval loops, and drift detection in production',
