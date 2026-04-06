@@ -26,12 +26,12 @@ export function Header() {
   return (
     <>
       <ScrollProgress className="fixed z-50 bg-zinc-900 dark:bg-zinc-100" />
-      <header className="mb-5">
-        <Link href="/" className="font-medium text-black dark:text-white">
+      <header className="mb-6">
+        <Link href="/" className="text-lg font-medium text-black sm:text-base dark:text-white">
           {NAME}
         </Link>
-        <p className="text-zinc-600 dark:text-zinc-500">{TITLE}</p>
-        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{SUMMARY}</p>
+        <p className="text-base text-zinc-400 sm:text-sm dark:text-zinc-500">{TITLE}</p>
+        <p className="mt-2 text-base leading-relaxed text-zinc-600 sm:text-sm dark:text-zinc-400">{SUMMARY}</p>
         <SkillsMarquee />
       </header>
     </>

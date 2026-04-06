@@ -1,7 +1,7 @@
 export const NAME = 'Rahul Malkireddy'
 export const TITLE = 'Staff Software Engineer'
 export const SUMMARY =
-  'Building AI-powered data platforms and distributed infrastructure. Currently architecting agentic systems, semantic layers, and MLOps pipelines at the intersection of reliability and intelligence.'
+  'Staff engineer focused on AI-powered platforms, distributed infrastructure, and agentic systems.'
 
 export const SKILLS = [
   'Go', 'Python', 'TypeScript', 'Swift',
@@ -55,7 +55,7 @@ export const PROJECTS: Project[] = [
   {
     name: 'AI Property Inspector API',
     description:
-      'Open source service that analyzes property photos and returns structured inspection reports. Deployed on GCP Cloud Run with Terraform IaC, GitHub Actions CI/CD, and LiteLLM model-agnostic routing (Claude + Gemini). Used by rentomator.com',
+      'Open source vision ML service that analyzes property photos and returns structured inspection reports. Deployed on GCP Cloud Run with Terraform IaC, GitHub Actions CI/CD, and LiteLLM model-agnostic routing across Claude and Gemini.',
     links: [
       { label: 'Github', href: 'https://github.com/rahuldean/property-inspector' },
       { label: 'Demo', href: 'https://github.com/rahuldean/property-inspector' },
@@ -119,7 +119,7 @@ export const WORK_EXPERIENCE: WorkExperience[] = [
   {
     company: 'Streem (acq. by Frontdoor)',
     title: 'Staff Software Engineer | Cross-Platform Tech Lead | Architect',
-    start: '2019',
+    start: '2021',
     end: 'Present',
     link: 'https://www.streem.com',
     id: 'work1',
@@ -127,8 +127,8 @@ export const WORK_EXPERIENCE: WorkExperience[] = [
   {
     company: 'Code Particle',
     title: 'Senior Software Engineer',
-    start: '2017',
-    end: '2019',
+    start: '2018',
+    end: '2021',
     link: 'https://www.linkedin.com/in/rahulreddym',
     id: 'work3',
   },
