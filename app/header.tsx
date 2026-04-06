@@ -1,15 +1,13 @@
 'use client'
 import Link from 'next/link'
 import { NAME, TITLE, SUMMARY, SKILLS } from './data'
+import { ScrollProgress } from '@/components/ui/scroll-progress'
 
 function SkillsMarquee() {
-  // duplicate so the second copy seamlessly follows the first
   const items = [...SKILLS, ...SKILLS]
 
   return (
-    <div
-      className="marquee-container mt-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
-    >
+    <div className="marquee-container mt-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
       <div className="flex w-max animate-marquee gap-2">
         {items.map((skill, i) => (
           <span
@@ -26,13 +24,16 @@ function SkillsMarquee() {
 
 export function Header() {
   return (
-    <header className="mb-5">
-      <Link href="/" className="font-medium text-black dark:text-white">
-        {NAME}
-      </Link>
-      <p className="text-zinc-600 dark:text-zinc-500">{TITLE}</p>
-      <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{SUMMARY}</p>
-      <SkillsMarquee />
-    </header>
+    <>
+      <ScrollProgress className="fixed z-50 bg-zinc-900 dark:bg-zinc-100" />
+      <header className="mb-5">
+        <Link href="/" className="font-medium text-black dark:text-white">
+          {NAME}
+        </Link>
+        <p className="text-zinc-600 dark:text-zinc-500">{TITLE}</p>
+        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{SUMMARY}</p>
+        <SkillsMarquee />
+      </header>
+    </>
   )
 }

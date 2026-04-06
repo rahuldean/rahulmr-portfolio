@@ -9,6 +9,7 @@ export const SKILLS = [
   'LLM Orchestration', 'LiteLLM', 'Agentic Systems', 'MLOps',
   'PostgreSQL', 'BigQuery', 'Redis', 'MongoDB',
   'GCP', 'Docker', 'Terraform', 'GitHub Actions',
+  'Cloudflare Workers', 'Cloudflare R2', 'Cloudflare D1',
   'Distributed Systems', 'Data Pipelines', 'Semantic Layer', 'API Design',
 ]
 
@@ -54,15 +55,27 @@ export const PROJECTS: Project[] = [
   {
     name: 'AI Property Inspector API',
     description:
-      'Open source service that analyzes property photos and returns structured inspection reports. Deployed on GCP Cloud Run with Terraform IaC, GitHub Actions CI/CD, and LiteLLM model-agnostic routing (Claude + Gemini).',
+      'Open source service that analyzes property photos and returns structured inspection reports. Deployed on GCP Cloud Run with Terraform IaC, GitHub Actions CI/CD, and LiteLLM model-agnostic routing (Claude + Gemini). Used by rentomator.com',
     links: [
       { label: 'Github', href: 'https://github.com/rahuldean/property-inspector' },
       { label: 'Demo', href: 'https://github.com/rahuldean/property-inspector' },
     ],
-    tag: 'Go, Docker, LiteLLM, Gemini (LLM), Claude (LLM), GCP Cloud Run, GCP Artifact Registry, GCP BigQuery, GCP Secret Manager, GCP Workload Identity, Terraform, GitHub Actions, NextJS',
+    tag: 'Go, Docker, LiteLLM, Gemini (LLM), Claude (LLM), GCP Cloud Run, GCP Artifact Registry, GCP BigQuery, GCP Secret Manager, GCP Workload Identity, Terraform, GitHub Actions, Next.js',
     year: '2025',
     icon: 'camera',
     id: 'project1',
+  },
+  {
+    name: 'Rentomator',
+    description:
+      'AI-powered rental management platform for landlords. Centralizes property operations including tenant management, lease tracking, rent payments, and maintenance requests. Features AI photo inspections that compare property conditions at move-in/move-out with automated reports.',
+    links: [
+      { label: 'Website', href: 'https://rentomator.com' },
+    ],
+    tag: 'Next.js, React, Vercel, Cloudflare R2, Cloudflare Workers, Cloudflare D1',
+    year: '2023',
+    icon: 'building-2',
+    id: 'project5',
   },
   {
     name: 'Archy',
@@ -95,7 +108,7 @@ export const PROJECTS: Project[] = [
     links: [
       { label: 'App', href: 'https://www.amazon.com/Gifsy-latest-viral-animated-images/dp/B01GLXSMIQ' },
     ],
-    tag: 'JavaScript, Web, Microsoft',
+    tag: 'Android, Kotlin, Azure',
     year: '2016',
     icon: 'play',
     id: 'project4',
@@ -104,24 +117,16 @@ export const PROJECTS: Project[] = [
 
 export const WORK_EXPERIENCE: WorkExperience[] = [
   {
-    company: 'Frontdoor',
-    title: 'Staff Software Engineer',
-    start: '2022',
+    company: 'Streem (acq. by Frontdoor)',
+    title: 'Staff Software Engineer | Cross-Platform Tech Lead | Architect',
+    start: '2019',
     end: 'Present',
-    link: 'https://www.frontdoorhome.com',
+    link: 'https://www.streem.com',
     id: 'work1',
   },
   {
-    company: 'Stream (acquired by Frontdoor)',
-    title: 'Cross-Platform Tech Lead',
-    start: '2019',
-    end: '2022',
-    link: 'https://www.linkedin.com/in/rahulreddym',
-    id: 'work2',
-  },
-  {
     company: 'Code Particle',
-    title: 'Software Engineer',
+    title: 'Senior Software Engineer',
     start: '2017',
     end: '2019',
     link: 'https://www.linkedin.com/in/rahulreddym',
@@ -130,7 +135,7 @@ export const WORK_EXPERIENCE: WorkExperience[] = [
   {
     company: 'Microsoft',
     title: 'Software Engineer',
-    start: '2015',
+    start: '2012',
     end: '2017',
     link: 'https://www.microsoft.com',
     id: 'work4',

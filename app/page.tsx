@@ -1,6 +1,6 @@
 'use client'
 import { motion } from 'motion/react'
-import { XIcon, Camera, Share2, Brain, Play, Briefcase, type LucideIcon } from 'lucide-react'
+import { XIcon, Camera, Share2, Brain, Play, Briefcase, Building2, Utensils, type LucideIcon } from 'lucide-react'
 import { Magnetic } from '@/components/ui/magnetic'
 import {
   MorphingDialog,
@@ -9,8 +9,6 @@ import {
   MorphingDialogClose,
   MorphingDialogContainer,
 } from '@/components/ui/morphing-dialog'
-import Link from 'next/link'
-import { AnimatedBackground } from '@/components/ui/animated-background'
 import {
   PROJECTS,
   WORK_EXPERIENCE,
@@ -95,6 +93,8 @@ const PROJECT_ICONS: Record<string, LucideIcon> = {
   'share-2': Share2,
   brain: Brain,
   play: Play,
+  'building-2': Building2,
+  utensils: Utensils,
 }
 
 function ProjectThumbnail({ project }: { project: Project }) {
@@ -175,7 +175,7 @@ export default function Personal() {
         <h3 className="mb-5 text-lg font-medium">Projects</h3>
         <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
           {PROJECTS.map((project) => (
-            <div key={project.name} className="py-4 first:pt-0 last:pb-0">
+            <div key={project.name} className="py-6 first:pt-0 last:pb-0">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <ProjectThumbnail project={project} />
@@ -183,27 +183,27 @@ export default function Personal() {
                 </div>
                 <span className="shrink-0 text-xs text-zinc-400 dark:text-zinc-500">{project.year}</span>
               </div>
-              <div className="mt-2 flex flex-wrap gap-1.5">
+              <div className="mt-3 flex flex-wrap gap-1.5">
                 {project.links.map((l: ProjectLink) => (
                   <a
                     key={l.label}
                     href={l.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`w-fit rounded-full px-3 py-1 text-xs font-medium transition-opacity hover:opacity-80 ${
+                    className={`w-fit rounded-full border px-2.5 py-0.5 text-xs transition-colors ${
                       l.label === 'Demo'
-                        ? 'bg-blue-500 text-white dark:bg-blue-600'
-                        : 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
+                        ? 'border-blue-200 text-blue-500 hover:border-blue-400 hover:text-blue-600 dark:border-blue-800 dark:text-blue-400 dark:hover:border-blue-600'
+                        : 'border-zinc-200 text-zinc-500 hover:border-zinc-400 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-500'
                     }`}
                   >
                     {l.label}
                   </a>
                 ))}
               </div>
-              <p className="mt-2 text-sm leading-relaxed text-justify text-zinc-500 dark:text-zinc-400">
+              <p className="mt-3 text-sm leading-relaxed text-justify text-zinc-500 dark:text-zinc-400">
                 {project.description}
               </p>
-              <div className="mt-2 flex flex-wrap gap-1">
+              <div className="mt-3 flex flex-wrap gap-1">
                 {project.tag.split(', ').map((tech) => (
                   <span key={tech} className="cursor-default rounded-md bg-zinc-100 px-2 py-0.5 text-xs text-zinc-500 transition-colors hover:bg-zinc-900 hover:text-white dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-100 dark:hover:text-zinc-900">
                     {tech}
@@ -223,7 +223,7 @@ export default function Personal() {
         <h3 className="mb-5 text-lg font-medium">Work Experience</h3>
         <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
           {WORK_EXPERIENCE.map((job) => (
-            <div key={job.id} className="py-4 first:pt-0 last:pb-0">
+            <div key={job.id} className="py-6 first:pt-0 last:pb-0">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
@@ -251,57 +251,39 @@ export default function Personal() {
       <motion.section
         variants={VARIANTS_SECTION}
         transition={TRANSITION_SECTION}
-        className="rounded-2xl border border-zinc-100 bg-zinc-50/60 px-5 py-4 dark:border-zinc-800 dark:bg-zinc-900/40"
+        className="rounded-2xl bg-zinc-50 px-5 py-4 dark:bg-zinc-900/40"
       >
-        <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Blog</h3>
-        <div className="flex flex-col space-y-0">
-          <AnimatedBackground
-            enableHover
-            className="h-full w-full rounded-lg bg-zinc-100 dark:bg-zinc-800/60"
-            transition={{
-              type: 'spring',
-              bounce: 0,
-              duration: 0.2,
-            }}
-          >
-            {BLOG_POSTS.map((post) => (
-              <Link
-                key={post.uid}
-                className="-mx-3 rounded-xl px-3 py-3"
-                href={post.link}
-                data-id={post.uid}
-              >
-                <div className="flex flex-col space-y-0.5">
-                  <h4 className="text-sm font-normal dark:text-zinc-100">
-                    {post.title}
-                  </h4>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                    {post.description}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </AnimatedBackground>
+        <h3 className="mb-5 text-lg font-medium">Writing</h3>
+        <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
+          {BLOG_POSTS.map((post) => (
+            <div key={post.uid} className="flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0">
+              <div>
+                <p className="text-sm font-[450] text-zinc-400 dark:text-zinc-500">{post.title}</p>
+                <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-600">{post.description}</p>
+              </div>
+              <span className="mt-0.5 shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
+                soon
+              </span>
+            </div>
+          ))}
         </div>
       </motion.section>
 
       <motion.section
         variants={VARIANTS_SECTION}
         transition={TRANSITION_SECTION}
-        className="rounded-2xl border border-zinc-100 bg-zinc-50/60 px-5 py-4 dark:border-zinc-800 dark:bg-zinc-900/40"
+        className="rounded-2xl bg-zinc-50 px-5 py-4 dark:bg-zinc-900/40"
       >
-        <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Connect</h3>
+        <h3 className="mb-5 text-lg font-medium">Connect</h3>
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center gap-3">
             {SOCIAL_LINKS.map((link) => (
               <MagneticSocialLink key={link.label} link={link.link}>
                 {link.label}
               </MagneticSocialLink>
             ))}
           </div>
-          <span className="inline-flex shrink-0 items-center rounded-full bg-zinc-100 px-2.5 py-1 text-sm text-black dark:bg-zinc-800 dark:text-zinc-100">
-            {EMAIL}
-          </span>
+          <span className="text-sm text-zinc-400 dark:text-zinc-500">{EMAIL}</span>
         </div>
       </motion.section>
     </motion.main>
