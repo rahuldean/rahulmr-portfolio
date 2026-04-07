@@ -5,6 +5,14 @@ import { highlight } from 'sugar-high'
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
+    img: ({ src, alt, ...props }: ComponentPropsWithoutRef<'img'>) => (
+      <img
+        src={src}
+        alt={alt}
+        style={{ transform: 'translateZ(0)' }}
+        {...props}
+      />
+    ),
     Cover: ({
       src,
       alt,
