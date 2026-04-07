@@ -172,14 +172,14 @@ export default function Personal() {
         transition={TRANSITION_SECTION}
         className="rounded-2xl bg-zinc-50 px-5 py-4 dark:bg-zinc-900/40"
       >
-        <h3 className="mb-5 text-xl font-medium sm:text-lg">Projects</h3>
+        <h3 className="mb-5 text-base font-medium">Projects</h3>
         <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
           {PROJECTS.map((project) => (
             <div key={project.name} className="py-6 first:pt-0 last:pb-0">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <ProjectThumbnail project={project} />
-                  <span className="text-base font-[450] text-zinc-900 dark:text-zinc-50">{project.name}</span>
+                  <span className="text-base font-medium text-zinc-900 dark:text-zinc-50">{project.name}</span>
                 </div>
                 <span className="shrink-0 text-xs text-zinc-400 dark:text-zinc-500">{project.year}</span>
               </div>
@@ -200,7 +200,7 @@ export default function Personal() {
                   </a>
                 ))}
               </div>
-              <p className="mt-3 text-base leading-relaxed text-justify text-zinc-700 sm:text-sm dark:text-zinc-300">
+              <p className="mt-3 text-base leading-relaxed text-justify text-zinc-700 dark:text-zinc-300">
                 {project.description}
               </p>
               <div className="mt-3 flex flex-wrap gap-1">
@@ -220,7 +220,7 @@ export default function Personal() {
         transition={TRANSITION_SECTION}
         className="rounded-2xl bg-zinc-50 px-5 py-4 dark:bg-zinc-900/40"
       >
-        <h3 className="mb-5 text-xl font-medium sm:text-lg">Work Experience</h3>
+        <h3 className="mb-5 text-base font-medium">Work Experience</h3>
         <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
           {WORK_EXPERIENCE.map((job) => (
             <div key={job.id} className="py-6 first:pt-0 last:pb-0">
@@ -233,7 +233,7 @@ export default function Personal() {
                     href={job.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-base font-[450] text-zinc-900 dark:text-zinc-50 hover:underline"
+                    className="text-base font-medium text-zinc-900 dark:text-zinc-50 hover:underline"
                   >
                     {job.company}
                   </a>
@@ -242,7 +242,7 @@ export default function Personal() {
                   {job.start} - {job.end}
                 </span>
               </div>
-              <p className="mt-1 text-base text-zinc-500 sm:text-sm dark:text-zinc-400">{job.title}</p>
+              <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{job.title}</p>
             </div>
           ))}
         </div>
@@ -253,19 +253,19 @@ export default function Personal() {
         transition={TRANSITION_SECTION}
         className="rounded-2xl bg-zinc-50 px-5 py-4 dark:bg-zinc-900/40"
       >
-        <h3 className="mb-5 text-xl font-medium sm:text-lg">Writing</h3>
+        <h3 className="mb-5 text-base font-medium">Writing</h3>
         <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
           {BLOG_POSTS.map((post) => (
             <div key={post.uid} className="flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0">
               {post.published ? (
                 <a href={post.link} className="group min-w-0">
-                  <p className="text-base font-[450] text-zinc-700 group-hover:underline sm:text-sm dark:text-zinc-300">{post.title}</p>
-                  <p className="mt-0.5 text-sm text-zinc-400 sm:text-xs dark:text-zinc-600">{post.description}</p>
+                  <p className="text-base font-medium text-zinc-700 group-hover:underline dark:text-zinc-300">{post.title}</p>
+                  <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-600">{post.description}</p>
                 </a>
               ) : (
                 <div>
-                  <p className="text-base font-[450] text-zinc-400 sm:text-sm dark:text-zinc-500">{post.title}</p>
-                  <p className="mt-0.5 text-sm text-zinc-400 sm:text-xs dark:text-zinc-600">{post.description}</p>
+                  <p className="text-base font-medium text-zinc-400 dark:text-zinc-500">{post.title}</p>
+                  <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-600">{post.description}</p>
                 </div>
               )}
               <span className="mt-0.5 shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
@@ -281,7 +281,7 @@ export default function Personal() {
         transition={TRANSITION_SECTION}
         className="rounded-2xl bg-zinc-50 px-5 py-4 dark:bg-zinc-900/40"
       >
-        <h3 className="mb-5 text-xl font-medium sm:text-lg">Connect</h3>
+        <h3 className="mb-5 text-base font-medium">Connect</h3>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             {SOCIAL_LINKS.map((link) => (
@@ -290,7 +290,7 @@ export default function Personal() {
               </MagneticSocialLink>
             ))}
           </div>
-          <span className="text-base text-zinc-400 sm:text-sm dark:text-zinc-500">{EMAIL}</span>
+          <span className="text-sm text-zinc-400 dark:text-zinc-500">{EMAIL}</span>
         </div>
       </motion.section>
     </motion.main>

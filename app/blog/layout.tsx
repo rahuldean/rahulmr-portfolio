@@ -46,7 +46,7 @@ function PostHeader() {
   }
 
   return (
-    <div className="mb-8 mt-24">
+    <div className="mb-8 mt-6">
       <button
         onClick={handleBack}
         className="mb-4 inline-flex items-center gap-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300"
@@ -83,6 +83,7 @@ export default function LayoutBlogPost({
       </div>
 
       <main className="pb-20">
+        <hr className="border-zinc-200 dark:border-zinc-800" />
         <PostHeader />
         <div className="prose prose-gray prose-h4:prose-base dark:prose-invert prose-h1:text-xl prose-h1:font-medium prose-h2:mt-12 prose-h2:scroll-m-20 prose-h2:text-lg prose-h2:font-medium prose-h3:text-base prose-h3:font-medium prose-h4:font-medium prose-h5:text-base prose-h5:font-medium prose-h6:text-base prose-h6:font-medium prose-strong:font-medium">
           {children}
