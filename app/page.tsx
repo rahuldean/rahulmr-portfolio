@@ -18,6 +18,8 @@ import {
   type Project,
   type ProjectLink,
 } from './data'
+import { BorderTrail } from '@/components/motion-primitives/border-trail'
+import { TextLoop } from '@/components/ui/text-loop'
 
 const VARIANTS_CONTAINER = {
   hidden: { opacity: 0 },
@@ -170,9 +172,9 @@ export default function Personal() {
       <motion.section
         variants={VARIANTS_SECTION}
         transition={TRANSITION_SECTION}
-        className="rounded-2xl bg-zinc-50 px-5 py-4 dark:bg-zinc-900/40"
+        className="py-4"
       >
-        <h3 className="mb-5 text-base font-medium">Projects</h3>
+        <h3 className="mb-5 text-xl font-medium">Projects</h3>
         <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
           {PROJECTS.map((project) => (
             <div key={project.name} className="py-6 first:pt-0 last:pb-0">
@@ -215,12 +217,14 @@ export default function Personal() {
         </div>
       </motion.section>
 
+      <hr className="border-zinc-200 dark:border-zinc-800" />
+
       <motion.section
         variants={VARIANTS_SECTION}
         transition={TRANSITION_SECTION}
-        className="rounded-2xl bg-zinc-50 px-5 py-4 dark:bg-zinc-900/40"
+        className="py-4"
       >
-        <h3 className="mb-5 text-base font-medium">Work Experience</h3>
+        <h3 className="mb-5 text-xl font-medium">Work Experience</h3>
         <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
           {WORK_EXPERIENCE.map((job) => (
             <div key={job.id} className="py-6 first:pt-0 last:pb-0">
@@ -248,40 +252,70 @@ export default function Personal() {
         </div>
       </motion.section>
 
-      <motion.section
-        variants={VARIANTS_SECTION}
-        transition={TRANSITION_SECTION}
-        className="rounded-2xl bg-zinc-50 px-5 py-4 dark:bg-zinc-900/40"
-      >
-        <h3 className="mb-5 text-base font-medium">Writing</h3>
-        <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
-          {BLOG_POSTS.map((post) => (
-            <div key={post.uid} className="flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0">
-              {post.published ? (
-                <a href={post.link} className="group min-w-0">
-                  <p className="text-base font-medium text-zinc-700 group-hover:underline dark:text-zinc-300">{post.title}</p>
-                  <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-600">{post.description}</p>
-                </a>
-              ) : (
-                <div>
-                  <p className="text-base font-medium text-zinc-400 dark:text-zinc-500">{post.title}</p>
-                  <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-600">{post.description}</p>
-                </div>
-              )}
-              <span className="mt-0.5 shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
-                {post.published ? 'read' : 'soon'}
-              </span>
-            </div>
-          ))}
-        </div>
-      </motion.section>
+      <hr className="border-zinc-200 dark:border-zinc-800" />
 
       <motion.section
         variants={VARIANTS_SECTION}
         transition={TRANSITION_SECTION}
-        className="rounded-2xl bg-zinc-50 px-5 py-4 dark:bg-zinc-900/40"
+        className="py-4"
       >
-        <h3 className="mb-5 text-base font-medium">Connect</h3>
+        <h3 className="mb-5 text-xl font-medium">Writing</h3>
+        <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
+          {BLOG_POSTS.map((post) =>
+            post.published ? (
+              <a
+                key={post.uid}
+                href={post.link}
+                className="group -mx-3 flex items-start justify-between gap-4 rounded-xl px-3 py-4 transition-colors first:pt-0 last:pb-0 hover:bg-zinc-100 active:bg-zinc-200 dark:hover:bg-zinc-800/50 dark:active:bg-zinc-700/60"
+              >
+                <div className="min-w-0">
+                  <p className="text-base font-medium text-zinc-700 dark:text-zinc-300">{post.title}</p>
+                  <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-600">{post.description}</p>
+                </div>
+                {post.highlight ? (
+                  <motion.div
+                    className="mt-0.5 flex shrink-0 items-center gap-1.5 rounded-full bg-zinc-100 px-2 py-0.5 dark:bg-zinc-800"
+                    animate={{ scale: [1, 1.06, 1] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                  >
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
+                    </span>
+                    <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">hot</span>
+                  </motion.div>
+                ) : (
+                  <span className="mt-0.5 shrink-0 rounded-full bg-zinc-200/60 px-2 py-0.5 text-xs text-zinc-400 transition-colors group-hover:bg-zinc-200 dark:bg-zinc-700/50 dark:text-zinc-500 dark:group-hover:bg-zinc-700">
+                    read
+                  </span>
+                )}
+              </a>
+            ) : (
+              <div
+                key={post.uid}
+                className="flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0"
+              >
+                <div className="min-w-0">
+                  <p className="text-base font-medium text-zinc-400 dark:text-zinc-500">{post.title}</p>
+                  <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-600">{post.description}</p>
+                </div>
+                <span className="mt-0.5 shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
+                  soon
+                </span>
+              </div>
+            )
+          )}
+        </div>
+      </motion.section>
+
+      <hr className="border-zinc-200 dark:border-zinc-800" />
+
+      <motion.section
+        variants={VARIANTS_SECTION}
+        transition={TRANSITION_SECTION}
+        className="py-4"
+      >
+        <h3 className="mb-5 text-lg font-medium">Connect</h3>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             {SOCIAL_LINKS.map((link) => (

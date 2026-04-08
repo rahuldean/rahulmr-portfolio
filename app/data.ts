@@ -45,6 +45,7 @@ type BlogPost = {
   link: string
   uid: string
   published?: boolean
+  highlight?: boolean
 }
 
 type SocialLink = {
@@ -150,6 +151,7 @@ export const BLOG_POSTS: BlogPost[] = [
     link: '/blog/property-inspection-api',
     uid: 'blog-1',
     published: true,
+    highlight: true,
   },
   {
     title: 'My homelab runs on Proxmox and OpenTofu, here is how I set it up',
