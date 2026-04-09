@@ -1,7 +1,7 @@
-export const NAME = 'Rahul Malkireddy'
-export const TITLE = 'Staff Software Engineer'
+export const NAME = 'Rahul Reddy'
+export const TITLE = 'Cross Platform Architect'
 export const SUMMARY =
-  'Staff engineer focused on AI-powered platforms, distributed infrastructure, and agentic systems.'
+  'Builder focused on AI-powered platforms, distributed infrastructure, and agentic systems.'
 
 export const SKILLS = [
   'Go', 'Python', 'TypeScript', 'Swift',
@@ -37,6 +37,7 @@ type WorkExperience = {
   end: string
   link: string
   id: string
+  description: string
 }
 
 type BlogPost = {
@@ -120,11 +121,12 @@ export const PROJECTS: Project[] = [
 export const WORK_EXPERIENCE: WorkExperience[] = [
   {
     company: 'Streem (acq. by Frontdoor)',
-    title: 'Software Engineer | Cross-Platform Tech Lead | Architect',
+    title: 'Cross-Platform Tech Lead | Architect',
     start: '2021',
     end: 'Present',
     link: 'https://www.streem.com',
     id: 'work1',
+    description: "Built Enterprise Agentic Systems, Data Product Platforms, Augemented Reality - Video apps."
   },
   {
     company: 'Code Particle',
@@ -133,6 +135,7 @@ export const WORK_EXPERIENCE: WorkExperience[] = [
     end: '2021',
     link: 'https://www.linkedin.com/in/rahulreddym',
     id: 'work3',
+    description: "Solo engineer for worlds largest gift card platform."
   },
   {
     company: 'Microsoft',
@@ -141,6 +144,7 @@ export const WORK_EXPERIENCE: WorkExperience[] = [
     end: '2017',
     link: 'https://www.microsoft.com',
     id: 'work4',
+    description: "Built large scale distributed systems across Windows, Azure and covert projects."
   },
 ]
 
