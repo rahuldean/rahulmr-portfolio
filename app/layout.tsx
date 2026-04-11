@@ -42,6 +42,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script defer src="https://cloud.umami.is/script.js" data-website-id="56d6bc44-57b8-425d-b748-7fb9c2495874"></script>
+      </head>
       <body
         className={`${geist.variable} ${geistMono.variable} bg-white tracking-tight antialiased dark:bg-zinc-950`}
       >
@@ -61,7 +64,6 @@ export default function RootLayout({
         </ThemeProvider>
         <Analytics />
       </body>
-      <script defer src="https://cloud.umami.is/script.js" data-website-id="56d6bc44-57b8-425d-b748-7fb9c2495874"></script>
     </html>
   )
 }
