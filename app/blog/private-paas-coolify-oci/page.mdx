@@ -1,0 +1,112 @@
+export const metadata = {
+  title: 'A private PaaS on Oracle Cloud with Coolify and zero open ports',
+  date: '2026-04-16',
+  summary:
+    'How I use Coolify on an OCI free-tier ARM instance to self-host services, with all traffic routed through a Cloudflare Tunnel so the VM has no inbound ports open at all.',
+}
+
+Oracle Cloud's free tier is genuinely good. You get four ARM OCPUs and 24 GB of RAM permanently, not as a trial. That is enough to run a real workload. The problem is that most guides for using it stop at "here is how to SSH in and run Docker." I wanted something closer to a private Heroku: deploy a service, get a URL, move on. This is how I built that.
+
+## The stack
+
+Three components do the work here.
+
+**Coolify** is an open-source PaaS that runs on your own server. You point it at a Docker Compose file or a Git repo, it handles builds, deployments, environment variables, and gives you a web UI to manage everything. It is what replaced me manually writing Compose files and SSHing into servers.
+
+**OCI A1 instance** is the compute. The ARM shape (`VM.Standard.A1.Flex`) is in the free tier. I use 3 OCPUs and 20 GB RAM out of the 4/24 available, leaving some headroom. Ubuntu 22.04 on ARM, 150 GB boot volume.
+
+**Cloudflare Tunnel** is how the outside world reaches services on the VM. The tunnel is an outbound-only connection from the VM to Cloudflare's edge. Because traffic only ever flows out from the VM, the OCI security list has zero open inbound ports. No SSH exposed to the internet. No HTTP/HTTPS. Nothing.
+
+## Why no open ports matters
+
+The typical setup opens port 22 for SSH and 443 for HTTPS. Those ports are constantly scanned. Even with key-based auth, SSH exposure is an attack surface that needs monitoring, fail2ban, or equivalent. Opening 443 means running a reverse proxy and handling TLS yourself.
+
+With a Cloudflare Tunnel, none of that is necessary. The VM initiates a persistent outbound connection to Cloudflare. Cloudflare's edge receives requests, validates them against Cloudflare Access policies, and forwards them through the tunnel to the right local port. The VM never accepts an inbound connection.
+
+The security list in Terraform looks like this:
+
+```hcl
+resource "oci_core_security_list" "main" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_vcn.main.id
+
+  egress_security_rules {
+    destination = "0.0.0.0/0"
+    protocol    = "all"
+  }
+  # no ingress_security_rules
+}
+```
+
+Egress is open so the tunnel can reach Cloudflare. That is the entire firewall configuration.
+
+## Provisioning with Terraform
+
+Everything is in Terraform - OCI networking, the instance, and all Cloudflare resources. The two providers live in the same config.
+
+```hcl
+terraform {
+  required_providers {
+    oci        = { source = "oracle/oci",         version = "~> 6.0" }
+    cloudflare = { source = "cloudflare/cloudflare", version = "~> 4.0" }
+  }
+}
+```
+
+The tunnel is created in Cloudflare and its ID is passed into the VM at boot time via cloud-init. The VM writes the tunnel credentials file before cloudflared installs, so the daemon comes up connected on first boot.
+
+```yaml
+write_files:
+  - path: /etc/cloudflared/creds.json
+    permissions: "0600"
+    content: |
+      {"AccountTag":"${account_id}","TunnelSecret":"${tunnel_secret}","TunnelID":"${tunnel_id}"}
+  - path: /etc/cloudflared/config.yml
+    content: |
+      tunnel: ${tunnel_id}
+      credentials-file: /etc/cloudflared/creds.json
+```
+
+The `${...}` values are injected by Terraform's `templatefile()` at plan time, so the VM arrives already configured.
+
+## Routing
+
+The tunnel handles two subdomains. Coolify's UI is at `coolify.labmox.com`, protected by Cloudflare Access with email-based auth - only my email can through. The AI gateway service I run on top of Coolify is at `aigw.labmox.com`, protected by a Cloudflare Access service token for machine-to-machine access.
+
+Coolify uses three ports internally: 8000 for the dashboard, 6001 for real-time updates, and 6002 for the web terminal. The tunnel ingress config maps paths to ports so the terminal actually works:
+
+```hcl
+ingress_rule {
+  hostname = "coolify.labmox.com"
+  path     = "/terminal/ws"
+  service  = "http://localhost:6002"
+}
+ingress_rule {
+  hostname = "coolify.labmox.com"
+  path     = "/app"
+  service  = "http://localhost:6001"
+}
+ingress_rule {
+  hostname = "coolify.labmox.com"
+  service  = "http://localhost:8000"
+}
+```
+
+Order matters here. Cloudflare evaluates ingress rules top to bottom and uses the first match.
+
+## SSH
+
+There is no SSH. Coolify has a web terminal that covers the cases where I would have reached for SSH - checking logs, running one-off commands inside a container. The VM itself is managed through Coolify's server view or by destroying and reprovisioning if something goes badly wrong. Removing SSH as a concept simplifies the threat model considerably.
+
+## What runs on it
+
+Coolify manages everything as Docker Compose projects. Adding a new service is adding a Compose file through the UI, setting environment variables, and deploying. Coolify handles the container lifecycle, restart policies, and health checks. The main thing I run is an AI gateway (LiteLLM) that proxies requests to various model providers behind a unified API - that is the `aigw.labmox.com` service.
+
+## What I would do differently
+
+The cloud-init approach means the VM needs to be destroyed and recreated to change the bootstrap configuration. For changes to running services that is fine - Coolify handles those. But if I want to update how cloudflared is configured at the system level, that is a reprovision. I would consider using a configuration management tool like Ansible for post-boot configuration to make that less disruptive.
+
+The Terraform state also now covers both OCI and Cloudflare resources. That means a single `terraform destroy` tears down everything - compute and DNS and Access policies. That is convenient but also something to be careful with.
+
+## Links
+- Github repo: [labmox](https://github.com/rahuldean/labmox)

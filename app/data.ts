@@ -150,6 +150,13 @@ export const WORK_EXPERIENCE: WorkExperience[] = [
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    title: 'A private PaaS on Oracle Cloud with Coolify and zero open ports',
+    description: 'Self-hosting services on the OCI free tier ARM instance with Cloudflare Tunnel so the VM has no inbound ports exposed at all',
+    link: '/blog/private-paas-coolify-oci',
+    uid: 'blog-8',
+    published: true,
+  },
+  {
     title: 'Shipping a property inspection API',
     description: 'Architecture decisions, tradeoffs, and what I would change',
     link: '/blog/property-inspection-api',
