@@ -1,0 +1,53 @@
+export const metadata = {
+  title: 'Cloudflare Access: use decision=non_identity for service-to-service auth',
+  date: '2026-04-18',
+  summary: 'Stops Cloudflare from redirecting to a login page for programmatic clients',
+}
+
+The default `decision = "allow"` policy redirects unauthenticated requests to a login page - which breaks any service or script hitting the endpoint programmatically. The fix is a separate policy with `decision = "non_identity"` that matches on a service token.
+
+## Terraform setup
+
+Create a service token and an Access policy that allows it through without triggering an identity flow:
+
+```hcl
+resource "cloudflare_zero_trust_access_service_token" "api_client" {
+  account_id           = var.cloudflare_account_id
+  name                 = "aigw-client"
+  min_days_for_renewal = 30
+}
+
+resource "cloudflare_zero_trust_access_policy" "api_service_token" {
+  account_id     = var.cloudflare_account_id
+  application_id = cloudflare_zero_trust_access_application.api.id
+  name           = "Service Token"
+  precedence     = 1
+  decision       = "non_identity"
+
+  include {
+    service_token = [cloudflare_zero_trust_access_service_token.api_client.id]
+  }
+}
+```
+
+Set `precedence = 1` so the service token policy is evaluated before any email/identity policy.
+
+Also set `skip_interstitial = true` on the application to suppress the Access login page for matched requests:
+
+```hcl
+resource "cloudflare_zero_trust_access_application" "api" {
+  ...
+  skip_interstitial = true
+}
+```
+
+## Request headers
+
+The calling service must send the two values output by the service token resource:
+
+```http
+CF-Access-Client-Id: <client_id output>
+CF-Access-Client-Secret: <client_secret output>
+```
+
+If the token matches the policy the request passes through. If not, Cloudflare returns a `403`.

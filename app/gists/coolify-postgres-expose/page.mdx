@@ -1,0 +1,26 @@
+export const metadata = {
+  title: 'Coolify: expose Postgres port so other services can reach it',
+  date: '2026-04-18',
+  summary: 'Service stack Postgres is isolated by default - enable public port to connect from other apps',
+}
+
+When you add Postgres via a Coolify **Service Stack**, the container is only reachable within that stack's internal Docker network. Other Coolify-managed apps on the same host can't connect to it.
+
+## Fix
+
+Open the Postgres service → **Configuration** → **General**
+
+```
+Make it publically available: enabled
+Public Port: 5432
+```
+
+Redeploy the postgres service.
+
+## Connecting from another service
+
+Use the **Postgres URL (internal)** value found under  **Configuration** → **General** → **Network** of the postgres service in your coolify dashboard.
+
+```
+DATABASE_URL=postgresql://user:password@host:port/dbname
+```

@@ -13,6 +13,7 @@ import {
   PROJECTS,
   WORK_EXPERIENCE,
   BLOG_POSTS,
+  GISTS,
   EMAIL,
   SOCIAL_LINKS,
   type Project,
@@ -306,6 +307,43 @@ export default function Personal() {
               </div>
             )
           )}
+        </div>
+      </motion.section>
+
+      <hr className="border-zinc-200 dark:border-zinc-800" />
+
+      <motion.section
+        variants={VARIANTS_SECTION}
+        transition={TRANSITION_SECTION}
+        className="py-4"
+      >
+        <h3 className="mb-5 text-xl font-medium">Gists</h3>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {GISTS.map((gist) => (
+            <a
+              key={gist.uid}
+              href={gist.link}
+              className="group flex flex-col gap-3 rounded-xl border border-zinc-200 p-4 transition-colors hover:border-zinc-300 hover:bg-zinc-50/50 dark:border-zinc-800 dark:hover:border-zinc-700 dark:hover:bg-zinc-900/30"
+            >
+              <div className="flex flex-wrap gap-1.5">
+                {gist.tags.map((tag) => (
+                  <span key={tag} className="rounded-md bg-zinc-100 px-2 py-0.5 text-xs text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <p className="text-sm font-medium leading-snug text-zinc-800 dark:text-zinc-200">
+                {gist.title}
+              </p>
+              <div className="rounded-lg bg-zinc-950 px-3 py-2.5 dark:bg-black">
+                {gist.snippet.split('\n').map((line, i) => (
+                  <p key={i} className="font-mono text-xs leading-relaxed text-zinc-400">
+                    {line}
+                  </p>
+                ))}
+              </div>
+            </a>
+          ))}
         </div>
       </motion.section>
 
