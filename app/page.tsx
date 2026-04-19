@@ -13,6 +13,7 @@ import {
   PROJECTS,
   WORK_EXPERIENCE,
   BLOG_POSTS,
+  GISTS,
   EMAIL,
   SOCIAL_LINKS,
   type Project,
@@ -306,6 +307,33 @@ export default function Personal() {
               </div>
             )
           )}
+        </div>
+      </motion.section>
+
+      <hr className="border-zinc-200 dark:border-zinc-800" />
+
+      <motion.section
+        variants={VARIANTS_SECTION}
+        transition={TRANSITION_SECTION}
+        className="py-4"
+      >
+        <h3 className="mb-5 text-xl font-medium">Gists</h3>
+        <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
+          {GISTS.map((gist) => (
+            <a
+              key={gist.uid}
+              href={gist.link}
+              className="group -mx-3 flex items-start justify-between gap-4 rounded-xl px-3 py-4 transition-colors first:pt-0 last:pb-0 hover:bg-zinc-100 active:bg-zinc-200 dark:hover:bg-zinc-800/50 dark:active:bg-zinc-700/60"
+            >
+              <div className="min-w-0">
+                <p className="text-base font-medium text-zinc-700 dark:text-zinc-300">{gist.title}</p>
+                <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-600">{gist.description}</p>
+              </div>
+              <span className="mt-0.5 shrink-0 rounded-full bg-zinc-200/60 px-2 py-0.5 text-xs text-zinc-400 transition-colors group-hover:bg-zinc-200 dark:bg-zinc-700/50 dark:text-zinc-500 dark:group-hover:bg-zinc-700">
+                read
+              </span>
+            </a>
+          ))}
         </div>
       </motion.section>
 

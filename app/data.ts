@@ -54,6 +54,14 @@ type SocialLink = {
   link: string
 }
 
+export type Gist = {
+  uid: string
+  title: string
+  description: string
+  link: string
+  date: string
+}
+
 export const PROJECTS: Project[] = [
   {
     name: 'AI Property Inspector API',
@@ -205,6 +213,23 @@ export const BLOG_POSTS: BlogPost[] = [
       'Structured outputs, eval loops, and drift detection in production',
     link: '/blog/reliable-ml-pipelines',
     uid: 'blog-2',
+  },
+]
+
+export const GISTS: Gist[] = [
+  {
+    uid: 'gist-1',
+    title: 'Cloudflare Access: use decision=non_identity for service-to-service auth',
+    description: 'How to configure a Cloudflare Access policy for programmatic or service-to-service traffic instead of human login flows',
+    link: '/gists/cloudflare-non-identity',
+    date: '2026-04-18',
+  },
+  {
+    uid: 'gist-2',
+    title: 'Coolify: expose Postgres port in a service stack so other services can reach it',
+    description: 'When creating a Postgres database via Coolify service stack, you need to enable public port exposure for other services to connect',
+    link: '/gists/coolify-postgres-expose',
+    date: '2026-04-18',
   },
 ]
 

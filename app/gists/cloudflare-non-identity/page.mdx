@@ -1,0 +1,44 @@
+export const metadata = {
+  title: 'Cloudflare Access: use decision=non_identity for service-to-service auth',
+  date: '2026-04-18',
+  summary: 'How to configure a Cloudflare Access policy for programmatic or service-to-service traffic instead of human login flows',
+}
+
+When you protect a route with Cloudflare Access, the default `decision=allow` policy redirects unauthenticated requests to a login page. That works for humans, but breaks any service, script, or CLI tool hitting the endpoint programmatically.
+
+The fix is `decision=non_identity`. It tells Cloudflare to allow the request through without triggering an identity-based redirect, while still letting you enforce other rules (IP ranges, service tokens, mTLS).
+
+## When to use it
+
+Use `decision=non_identity` when the consumer of the route is:
+
+- A backend service calling another internal service
+- A CI/CD pipeline or GitHub Actions job
+- A CLI tool or script
+- Any automated client that cannot complete an OAuth flow
+
+## How to set it
+
+In the Cloudflare dashboard, go to **Access → Applications → your app → Policies**.
+
+Add a policy and set the **Action** to **Non-Identity**. Then add the rules that should match - typically a **Service Token** you've created under **Access → Service Auth → Service Tokens**.
+
+```
+Action:  Non-Identity
+Include:  Service Token → <your-token-name>
+```
+
+The service making requests must send two headers:
+
+```http
+CF-Access-Client-Id: <client-id>
+CF-Access-Client-Secret: <client-secret>
+```
+
+Both values come from the service token you created in the dashboard.
+
+## What it does not do
+
+`decision=non_identity` does not skip Access entirely - the request still hits Cloudflare's edge and must match the policy rules. It just skips the identity provider redirect, so your service gets a `200` instead of a `302` to a login page.
+
+If nothing matches the non-identity policy, the request is denied with a `403`.
