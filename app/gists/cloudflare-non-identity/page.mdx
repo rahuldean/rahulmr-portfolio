@@ -1,44 +1,53 @@
 export const metadata = {
   title: 'Cloudflare Access: use decision=non_identity for service-to-service auth',
   date: '2026-04-18',
-  summary: 'How to configure a Cloudflare Access policy for programmatic or service-to-service traffic instead of human login flows',
+  summary: 'Stops Cloudflare from redirecting to a login page for programmatic clients',
 }
 
-When you protect a route with Cloudflare Access, the default `decision=allow` policy redirects unauthenticated requests to a login page. That works for humans, but breaks any service, script, or CLI tool hitting the endpoint programmatically.
+The default `decision = "allow"` policy redirects unauthenticated requests to a login page - which breaks any service or script hitting the endpoint programmatically. The fix is a separate policy with `decision = "non_identity"` that matches on a service token.
 
-The fix is `decision=non_identity`. It tells Cloudflare to allow the request through without triggering an identity-based redirect, while still letting you enforce other rules (IP ranges, service tokens, mTLS).
+## Terraform setup
 
-## When to use it
+Create a service token and an Access policy that allows it through without triggering an identity flow:
 
-Use `decision=non_identity` when the consumer of the route is:
+```hcl
+resource "cloudflare_zero_trust_access_service_token" "api_client" {
+  account_id           = var.cloudflare_account_id
+  name                 = "aigw-client"
+  min_days_for_renewal = 30
+}
 
-- A backend service calling another internal service
-- A CI/CD pipeline or GitHub Actions job
-- A CLI tool or script
-- Any automated client that cannot complete an OAuth flow
+resource "cloudflare_zero_trust_access_policy" "api_service_token" {
+  account_id     = var.cloudflare_account_id
+  application_id = cloudflare_zero_trust_access_application.api.id
+  name           = "Service Token"
+  precedence     = 1
+  decision       = "non_identity"
 
-## How to set it
-
-In the Cloudflare dashboard, go to **Access → Applications → your app → Policies**.
-
-Add a policy and set the **Action** to **Non-Identity**. Then add the rules that should match - typically a **Service Token** you've created under **Access → Service Auth → Service Tokens**.
-
+  include {
+    service_token = [cloudflare_zero_trust_access_service_token.api_client.id]
+  }
+}
 ```
-Action:  Non-Identity
-Include:  Service Token → <your-token-name>
+
+Set `precedence = 1` so the service token policy is evaluated before any email/identity policy.
+
+Also set `skip_interstitial = true` on the application to suppress the Access login page for matched requests:
+
+```hcl
+resource "cloudflare_zero_trust_access_application" "api" {
+  ...
+  skip_interstitial = true
+}
 ```
 
-The service making requests must send two headers:
+## Request headers
+
+The calling service must send the two values output by the service token resource:
 
 ```http
-CF-Access-Client-Id: <client-id>
-CF-Access-Client-Secret: <client-secret>
+CF-Access-Client-Id: <client_id output>
+CF-Access-Client-Secret: <client_secret output>
 ```
 
-Both values come from the service token you created in the dashboard.
-
-## What it does not do
-
-`decision=non_identity` does not skip Access entirely - the request still hits Cloudflare's edge and must match the policy rules. It just skips the identity provider redirect, so your service gets a `200` instead of a `302` to a login page.
-
-If nothing matches the non-identity policy, the request is denied with a `403`.
+If the token matches the policy the request passes through. If not, Cloudflare returns a `403`.

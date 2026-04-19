@@ -318,20 +318,30 @@ export default function Personal() {
         className="py-4"
       >
         <h3 className="mb-5 text-xl font-medium">Gists</h3>
-        <div className="flex flex-col divide-y divide-zinc-100 dark:divide-zinc-800">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {GISTS.map((gist) => (
             <a
               key={gist.uid}
               href={gist.link}
-              className="group -mx-3 flex items-start justify-between gap-4 rounded-xl px-3 py-4 transition-colors first:pt-0 last:pb-0 hover:bg-zinc-100 active:bg-zinc-200 dark:hover:bg-zinc-800/50 dark:active:bg-zinc-700/60"
+              className="group flex flex-col gap-3 rounded-xl border border-zinc-200 p-4 transition-colors hover:border-zinc-300 hover:bg-zinc-50/50 dark:border-zinc-800 dark:hover:border-zinc-700 dark:hover:bg-zinc-900/30"
             >
-              <div className="min-w-0">
-                <p className="text-base font-medium text-zinc-700 dark:text-zinc-300">{gist.title}</p>
-                <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-600">{gist.description}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {gist.tags.map((tag) => (
+                  <span key={tag} className="rounded-md bg-zinc-100 px-2 py-0.5 text-xs text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                    {tag}
+                  </span>
+                ))}
               </div>
-              <span className="mt-0.5 shrink-0 rounded-full bg-zinc-200/60 px-2 py-0.5 text-xs text-zinc-400 transition-colors group-hover:bg-zinc-200 dark:bg-zinc-700/50 dark:text-zinc-500 dark:group-hover:bg-zinc-700">
-                read
-              </span>
+              <p className="text-sm font-medium leading-snug text-zinc-800 dark:text-zinc-200">
+                {gist.title}
+              </p>
+              <div className="rounded-lg bg-zinc-950 px-3 py-2.5 dark:bg-black">
+                {gist.snippet.split('\n').map((line, i) => (
+                  <p key={i} className="font-mono text-xs leading-relaxed text-zinc-400">
+                    {line}
+                  </p>
+                ))}
+              </div>
             </a>
           ))}
         </div>

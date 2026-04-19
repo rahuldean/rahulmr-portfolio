@@ -1,37 +1,26 @@
 export const metadata = {
-  title: 'Coolify: expose Postgres port in a service stack so other services can reach it',
+  title: 'Coolify: expose Postgres port so other services can reach it',
   date: '2026-04-18',
-  summary: 'When creating a Postgres database via Coolify service stack, enable public port exposure so other services on the same host can connect',
+  summary: 'Service stack Postgres is isolated by default - enable public port to connect from other apps',
 }
 
-When you add a Postgres database through a Coolify **Service Stack**, the container runs but its port is not exposed outside the stack's internal Docker network by default. Any service outside that stack - including other Coolify-managed apps on the same host - cannot reach it.
+When you add Postgres via a Coolify **Service Stack**, the container is only reachable within that stack's internal Docker network. Other Coolify-managed apps on the same host can't connect to it.
 
-## The symptom
+## Fix
 
-Your app logs a connection refused or timeout error even though the Postgres container shows as running in the Coolify UI. The database is healthy; it just isn't reachable from outside its stack network.
-
-## The fix
-
-In the Coolify UI, open the Postgres service inside your stack and find the **Ports** section. Enable **Expose Port to Public** and set the host port you want to bind to (e.g. `5432` or a custom port if `5432` is already taken on the host).
+Open the Postgres service → **Configuration** → **General**
 
 ```
-Expose Port to Public: enabled
-Host Port: 5432
-Container Port: 5432
+Make it publically available: enabled
+Public Port: 5432
 ```
 
-Save and redeploy the service. Coolify will add a `ports` binding to the underlying Docker Compose config, making the container reachable at `host-ip:5432` from any other container or service on the same machine.
+Redeploy the postgres service.
 
-## Connecting from another Coolify service
+## Connecting from another service
 
-Use the host's internal Docker bridge IP (`172.17.0.1` by default on Linux) or the host's LAN IP as the database host in your app's environment variables:
+Use the **Postgres URL (internal)** value found under  **Configuration** → **General** → **Network** of the postgres service in your coolify dashboard.
 
 ```
-DATABASE_URL=postgresql://user:password@172.17.0.1:5432/dbname
+DATABASE_URL=postgresql://user:password@host:port/dbname
 ```
-
-Avoid using `localhost` - from inside a container, that resolves to the container itself, not the host.
-
-## Note on security
-
-Exposing a port to the host makes it reachable from anywhere that can reach the host machine. If the host is behind Cloudflare Tunnel with no open inbound ports, the risk is low. Otherwise, bind Postgres to a specific interface or add a firewall rule to restrict access to trusted IPs.
