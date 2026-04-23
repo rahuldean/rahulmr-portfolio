@@ -1,7 +1,13 @@
 export const NAME = 'Rahul Reddy'
-export const TITLE = 'Cross Platform Architect'
+export const TITLE = 'I build AI-powered platforms and the infrastructure they run on.'
 export const SUMMARY =
-  'Builder focused on AI-powered platforms, distributed infrastructure, and agentic systems.'
+  'Currently leading platform and AI work at Frontdoor (acq. Streem). Shipping side projects in Go and TypeScript - mostly AI infra and self-hosted systems.'
+
+export const ABOUT =
+  'Previously at Microsoft. I write about the stuff I build, and I build the stuff I write about.'
+
+export const CONNECT_CTA =
+  'Open to conversations about Staff+ roles in AI platforms and infra, or collaboration on open-source AI infra projects.'
 
 export const SKILLS = [
   'Go', 'Python', 'TypeScript', 'Swift',
@@ -20,6 +26,7 @@ export type ProjectLink = {
 
 export type Project = {
   name: string
+  hook?: string
   description: string
   links: ProjectLink[]
   tag: string
@@ -28,6 +35,7 @@ export type Project = {
   video?: string
   image?: string
   id: string
+  featured?: boolean
 }
 
 type WorkExperience = {
@@ -40,13 +48,14 @@ type WorkExperience = {
   description: string
 }
 
-type BlogPost = {
+export type BlogPost = {
   title: string
   description: string
   link: string
   uid: string
   published?: boolean
   highlight?: boolean
+  cluster?: 'ai' | 'homelab'
 }
 
 type SocialLink = {
@@ -67,19 +76,22 @@ export type Gist = {
 export const PROJECTS: Project[] = [
   {
     name: 'AI Property Inspector API',
+    hook: 'Property inspection reports still take 45 minutes of manual photo review. This service does it in seconds.',
     description:
       'Open source vision ML service that analyzes property photos and returns structured inspection reports. Deployed on GCP Cloud Run with Terraform IaC, GitHub Actions CI/CD, and LiteLLM model-agnostic routing across Claude and Gemini.',
     links: [
       { label: 'Github', href: 'https://github.com/rahuldean/property-inspector' },
       { label: 'Demo', href: 'https://inspector-app-512290277927.us-east1.run.app/?token=B81D895C-C5D1-4302-96E2-4C0750EE195C&src=rahulmx.com&path=/#projects' },
     ],
-    tag: 'Go, Docker, LiteLLM, Gemini (LLM), Claude (LLM), GCP Cloud Run, GCP Artifact Registry, GCP BigQuery, GCP Secret Manager, GCP Workload Identity, Terraform, GitHub Actions, Next.js',
+    tag: 'Go, Docker, LiteLLM, Gemini, Claude, GCP Cloud Run, Artifact Registry, BigQuery, Secret Manager, Workload Identity, Terraform, GitHub Actions, Next.js',
     year: '2025',
     icon: 'camera',
     id: 'project1',
+    featured: true,
   },
   {
     name: 'Rentomator',
+    hook: 'Because landlords shouldn\'t need five tools to manage one property.',
     description:
       'AI-powered rental management platform for landlords. Centralizes property operations including tenant management, lease tracking, rent payments, and maintenance requests. Features AI photo inspections that compare property conditions at move-in/move-out with automated reports.',
     links: [
@@ -91,33 +103,46 @@ export const PROJECTS: Project[] = [
     id: 'project5',
   },
   {
-    name: 'Archy',
+    name: 'Homelab / labmox',
+    hook: 'A reproducible homelab - Proxmox, LXC, OpenTofu, zero open ports.',
     description:
-      'iOS application (MVP) for sending and receiving referrals for products, services, and recommendations. Built a real-time referral graph with SocketIO and a Redis-backed NodeJS API on Google Compute Engine.',
+      'Home infrastructure as code. LXC containers managed with OpenTofu, a private PaaS on OCI with Cloudflare Tunnel so nothing is exposed to the public internet, and internal DNS + TLS via Caddy and AdGuard Home.',
+    links: [
+      { label: 'Github', href: 'https://github.com/rahuldean/labmox' },
+    ],
+    tag: 'Proxmox, LXC, OpenTofu, Cloudflare Tunnel, Caddy, AdGuard Home, Coolify, OCI',
+    year: '2024',
+    icon: 'server',
+    id: 'project6',
+  },
+]
+
+export const EARLIER_PROJECTS: Project[] = [
+  {
+    name: 'Archy',
+    description: 'iOS referral graph MVP. Swift, Node, SocketIO, Redis.',
     links: [
       { label: 'Demo', href: 'https://www.youtube.com/watch?v=V3IAef1WsAw' },
     ],
-    tag: 'Swift, iOS, Node.js, Express, SocketIO, MongoDB, Redis, Docker, Google Compute Engine',
+    tag: 'Swift, iOS, Node.js, SocketIO, Redis',
     year: '2019',
     icon: 'share-2',
     id: 'project2',
   },
   {
     name: 'Handwritten Number Synthesis via GAN',
-    description:
-      'Deep neural network that synthesizes handwritten numbers using Generative Adversarial Networks. Trained on the MNIST database using Keras and TensorFlow on Google Compute Engine.',
+    description: 'MNIST GAN in Keras/TensorFlow.',
     links: [
       { label: 'Presentation', href: 'https://onedrive.live.com/:p:/g/personal/AFEBC0B85CC8D9CE/s!As7ZyFy4wOuvgQqeDlvgzY58FDc2?resid=AFEBC0B85CC8D9CE!138&ithint=file%2Cpptx&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3AvcyFBczdaeUZ5NHdPdXZnUXFlRGx2Z3pZNThGRGMy' },
     ],
-    tag: 'Python, TensorFlow, Keras, GAN, MNIST, Google Compute Engine, Ubuntu',
+    tag: 'Python, Keras, TensorFlow, GAN',
     year: '2018',
     icon: 'brain',
     id: 'project3',
   },
   {
     name: 'Gifsy',
-    description:
-      'GIF discovery and sharing platform built during tenure at Microsoft. Largest collection of curated GIFs with fast search and browsing experience.',
+    description: 'GIF discovery app shipped during Microsoft tenure.',
     links: [
       { label: 'App', href: 'https://www.amazon.com/Gifsy-latest-viral-animated-images/dp/B01GLXSMIQ' },
     ],
@@ -136,7 +161,7 @@ export const WORK_EXPERIENCE: WorkExperience[] = [
     end: 'Present',
     link: 'https://www.streem.com',
     id: 'work1',
-    description: "Built Enterprise Agentic Systems, Data Product Platforms, Augemented Reality - Video apps."
+    description: 'Currently leading platform and AI work.',
   },
   {
     company: 'Code Particle',
@@ -145,7 +170,7 @@ export const WORK_EXPERIENCE: WorkExperience[] = [
     end: '2021',
     link: 'https://www.linkedin.com/in/rahulreddym',
     id: 'work3',
-    description: "Solo engineer for worlds largest gift card platform."
+    description: 'Solo engineer on a large-scale gift card platform.',
   },
   {
     company: 'Microsoft',
@@ -154,67 +179,74 @@ export const WORK_EXPERIENCE: WorkExperience[] = [
     end: '2017',
     link: 'https://www.microsoft.com',
     id: 'work4',
-    description: "Built large scale distributed systems across Windows, Azure and covert projects."
+    description: 'Distributed systems across Windows and Azure.',
   },
 ]
 
 export const BLOG_POSTS: BlogPost[] = [
   {
-    title: 'A private PaaS on Oracle Cloud with Coolify and zero open ports',
-    description: 'Self-hosting services on the OCI free tier ARM instance with Cloudflare Tunnel so the VM has no inbound ports exposed at all',
-    link: '/blog/private-paas-coolify-oci',
-    uid: 'blog-8',
-    published: true,
-  },
-  {
     title: 'Shipping a property inspection API',
-    description: 'Architecture decisions, tradeoffs, and what I would change',
+    description: 'Architecture decisions, tradeoffs, and what I would change.',
     link: '/blog/property-inspection-api',
     uid: 'blog-1',
     published: true,
     highlight: true,
-  },
-  {
-    title: 'My homelab runs on Proxmox and OpenTofu, here is how I set it up',
-    description: 'IaC for a reproducible homelab: LXC containers, OpenTofu, and why not Terraform',
-    link: '/blog/proxmox-opentofu-homelab',
-    uid: 'blog-3',
-    published: true,
-  },
-  {
-    title: 'Why I stopped using manual Docker installs and moved to LXC containers',
-    description: 'How LXC containers changed the way I manage homelab services and why Docker still has a place',
-    link: '/blog/lxc-vs-docker-homelab',
-    uid: 'blog-4',
-    published: true,
-  },
-  {
-    title: 'Self-hosting a reverse proxy and internal DNS on Proxmox',
-    description: 'Caddy, AdGuard Home, split DNS, and local TLS for internal services',
-    link: '/blog/reverse-proxy-dns-proxmox',
-    uid: 'blog-5',
-    published: true,
+    cluster: 'ai',
   },
   {
     title: 'Modeling login flows as state machines in TypeScript',
-    description: 'Why I built auth-machines and what explicit state machines buy you in auth flows',
+    description: 'Why I built auth-machines and what explicit state machines buy you in auth flows.',
     link: '/blog/auth-state-machines-typescript',
     uid: 'blog-6',
     published: true,
+    cluster: 'ai',
   },
   {
     title: 'The MFA flow nobody talks about: handling partial auth state',
-    description: 'What lives between password verification and MFA completion, and how to handle it cleanly',
+    description: 'What lives between password verification and MFA completion, and how to handle it cleanly.',
     link: '/blog/mfa-partial-auth-state',
     uid: 'blog-7',
     published: true,
+    cluster: 'ai',
   },
   {
     title: 'Building reliable ML pipelines',
-    description:
-      'Structured outputs, eval loops, and drift detection in production',
+    description: 'Structured outputs, eval loops, and drift detection in production.',
     link: '/blog/reliable-ml-pipelines',
     uid: 'blog-2',
+    cluster: 'ai',
+  },
+  {
+    title: 'A private PaaS on Oracle Cloud with Coolify and zero open ports',
+    description: 'Self-hosting services on the OCI free tier ARM instance with Cloudflare Tunnel so the VM has no inbound ports exposed at all.',
+    link: '/blog/private-paas-coolify-oci',
+    uid: 'blog-8',
+    published: true,
+    cluster: 'homelab',
+  },
+  {
+    title: 'My homelab runs on Proxmox and OpenTofu, here is how I set it up',
+    description: 'IaC for a reproducible homelab: LXC containers, OpenTofu, and why not Terraform.',
+    link: '/blog/proxmox-opentofu-homelab',
+    uid: 'blog-3',
+    published: true,
+    cluster: 'homelab',
+  },
+  {
+    title: 'Why I stopped using manual Docker installs and moved to LXC containers',
+    description: 'How LXC containers changed the way I manage homelab services and why Docker still has a place.',
+    link: '/blog/lxc-vs-docker-homelab',
+    uid: 'blog-4',
+    published: true,
+    cluster: 'homelab',
+  },
+  {
+    title: 'Self-hosting a reverse proxy and internal DNS on Proxmox',
+    description: 'Caddy, AdGuard Home, split DNS, and local TLS for internal services.',
+    link: '/blog/reverse-proxy-dns-proxmox',
+    uid: 'blog-5',
+    published: true,
+    cluster: 'homelab',
   },
 ]
 
