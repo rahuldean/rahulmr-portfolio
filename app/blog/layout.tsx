@@ -1,10 +1,32 @@
 'use client'
 import { TextMorph } from '@/components/ui/text-morph'
 import { ScrollProgress } from '@/components/ui/scroll-progress'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowLeftIcon } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { BLOG_POSTS } from '../data'
+
+function useScrollDepthTracking(slug: string) {
+  const fired = useRef(false)
+
+  useEffect(() => {
+    fired.current = false
+
+    function onScroll() {
+      if (fired.current) return
+      const el = document.documentElement
+      const scrolled = el.scrollTop + el.clientHeight
+      const total = el.scrollHeight
+      if (total > 0 && scrolled / total >= 0.9) {
+        fired.current = true
+        ;(window as any).umami?.track('blog-scroll-complete', { slug })
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [slug])
+}
 
 function CopyButton() {
   const [text, setText] = useState('Copy')
@@ -34,7 +56,8 @@ function CopyButton() {
 function PostHeader() {
   const pathname = usePathname()
   const router = useRouter()
-  const slug = pathname.split('/').pop()
+  const slug = pathname.split('/').pop() ?? ''
+  useScrollDepthTracking(slug)
   const post = BLOG_POSTS.find((p) => p.link === `/blog/${slug}`)
 
   function handleBack() {

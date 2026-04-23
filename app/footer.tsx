@@ -75,6 +75,18 @@ export function Footer() {
           <ThemeSwitch />
         </div>
       </div>
+      <p className="mt-2 text-xs text-zinc-400 dark:text-zinc-600">
+        This site uses{' '}
+        <a
+          href="https://umami.is"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-2 hover:text-zinc-600 dark:hover:text-zinc-400"
+        >
+          Umami
+        </a>{' '}
+        for privacy-friendly analytics. No cookies, no personal data.
+      </p>
     </footer>
   )
 }
