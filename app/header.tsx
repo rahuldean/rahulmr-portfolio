@@ -70,12 +70,14 @@ export function Header() {
         </Link>
         <p className="mt-2 text-base font-medium text-zinc-700 dark:text-zinc-300">{TITLE}</p>
         <p className="mt-1.5 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">{SUMMARY}</p>
-        <div className="mt-4 flex items-center gap-2">
-          {SOCIAL_LINKS.map((s) => (
-            <HeroCTA key={s.label} link={s.link}>
-              {s.label}
-            </HeroCTA>
-          ))}
+        <div className="mt-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {SOCIAL_LINKS.map((s) => (
+              <HeroCTA key={s.label} link={s.link}>
+                {s.label}
+              </HeroCTA>
+            ))}
+          </div>
           <span className="text-sm text-zinc-400 dark:text-zinc-500">{EMAIL}</span>
         </div>
         <SkillsMarquee />

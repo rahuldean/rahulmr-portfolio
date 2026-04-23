@@ -1,13 +1,7 @@
 export const NAME = 'Rahul Reddy'
-export const TITLE = 'I build AI-powered platforms and the infrastructure they run on.'
+export const TITLE = 'I build AI platforms, Cross-Platform Apps, and the Infra they run on.'
 export const SUMMARY =
-  'Currently leading platform and AI work at Frontdoor (acq. Streem). Shipping side projects in Go and TypeScript - mostly AI infra and self-hosted systems.'
-
-export const ABOUT =
-  'Previously at Microsoft. I write about the stuff I build, and I build the stuff I write about.'
-
-export const CONNECT_CTA =
-  'Open to conversations about Staff+ roles in AI platforms and infra, or collaboration on open-source AI infra projects.'
+  'Building in the open, writing about what breaks, and sharing the occasional opinion.'
 
 export const SKILLS = [
   'Go', 'Python', 'TypeScript', 'Swift',

@@ -7,7 +7,6 @@ import {
   Share2,
   Brain,
   Play,
-  Briefcase,
   Building2,
   Utensils,
   Server,
@@ -31,8 +30,6 @@ import {
   GISTS,
   EMAIL,
   SOCIAL_LINKS,
-  ABOUT,
-  CONNECT_CTA,
   type Project,
   type ProjectLink,
   type BlogPost,
@@ -588,18 +585,6 @@ export default function Personal() {
 
       <hr className="border-zinc-200 dark:border-zinc-800" />
 
-      {/* About */}
-      <motion.section
-        variants={VARIANTS_SECTION}
-        transition={TRANSITION_SECTION}
-        className="py-4"
-      >
-        <h3 className="mb-3 text-xl font-medium">About</h3>
-        <p className="text-base leading-relaxed text-zinc-600 dark:text-zinc-400">{ABOUT}</p>
-      </motion.section>
-
-      <hr className="border-zinc-200 dark:border-zinc-800" />
-
       {/* Connect */}
       <motion.section
         variants={VARIANTS_SECTION}
@@ -607,7 +592,6 @@ export default function Personal() {
         className="py-4"
       >
         <h3 className="mb-3 text-lg font-medium">Connect</h3>
-        <p className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">{CONNECT_CTA}</p>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             {SOCIAL_LINKS.map((link) => (
