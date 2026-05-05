@@ -4,13 +4,22 @@ export const SUMMARY =
   'Building in the open, writing about what breaks, and sharing the occasional opinion.'
 
 export const SKILLS = [
-  'Go', 'Python', 'TypeScript', 'Swift',
+  // Languages
+  'Go', 'TypeScript', 'Swift', 'Python',
+  // Mobile & Cross-Platform
+  'iOS', 'SwiftUI', 'React Native',
+  // Web & Frameworks
   'Next.js', 'React', 'Node.js', 'FastAPI',
-  'LLM Orchestration', 'LiteLLM', 'Agentic Systems', 'MLOps',
-  'PostgreSQL', 'BigQuery', 'Redis', 'MongoDB',
-  'GCP', 'Docker', 'Terraform', 'GitHub Actions',
-  'Cloudflare Workers', 'Cloudflare R2', 'Cloudflare D1',
-  'Distributed Systems', 'Data Pipelines', 'Semantic Layer', 'API Design',
+  // AI & Agents
+  'LLM Orchestration', 'Agentic Systems', 'LiteLLM', 'RAG', 'Prompt Engineering',
+  // Data & Storage
+  'PostgreSQL', 'BigQuery', 'Snowflake', 'Redis', 'MongoDB',
+  // Infrastructure
+  'GCP', 'Docker', 'Terraform', 'Proxmox', 'GitHub Actions',
+  // Edge & Serverless
+  'Cloudflare Workers', 'Cloudflare R2', 'Cloudflare D1', 'Cloudflare Tunnel',
+  // Architecture
+  'Distributed Systems', 'API Design', 'Data Pipelines', 'Platform Architecture',
 ]
 
 export type ProjectLink = {
@@ -75,13 +84,24 @@ export const PROJECTS: Project[] = [
       'Open source vision ML service that analyzes property photos and returns structured inspection reports. Deployed on GCP Cloud Run with Terraform IaC, GitHub Actions CI/CD, and LiteLLM model-agnostic routing across Claude and Gemini.',
     links: [
       { label: 'Github', href: 'https://github.com/rahuldean/property-inspector' },
-      { label: 'Demo', href: 'https://inspector-app-512290277927.us-east1.run.app/?token=B81D895C-C5D1-4302-96E2-4C0750EE195C&src=rahulmx.com&path=/#projects' },
+      { label: 'Demo', href: 'https://inspector-app-512290277927.us-east1.run.app/?token=B81D895C-C5D1-4302-96E2-4C0750EE195C&src=rahulmx.com&section=projects' },
     ],
-    tag: 'Go, Docker, LiteLLM, Gemini, Claude, GCP Cloud Run, Artifact Registry, BigQuery, Secret Manager, Workload Identity, Terraform, GitHub Actions, Next.js',
+    tag: 'Go, Docker, LiteLLM, Gemini, GCP Cloud Run, Artifact Registry, BigQuery, Secret Manager, Workload Identity, Terraform, GitHub Actions, Next.js',
     year: '2025',
     icon: 'camera',
     id: 'project1',
     featured: true,
+  },
+  {
+    name: 'Palato',
+    hook: 'Your server shouldn\'t know your dietary restrictions.',
+    description:
+      'Privacy-first iOS dining companion that scans physical menus with VisionKit OCR and ranks dishes against your intent using on-device LLMs. Personal context never leaves the device.',
+    links: [],
+    tag: 'Swift 6, SwiftUI, VisionKit, Foundation Models, SwiftData, iOS',
+    year: '2025',
+    icon: 'utensils',
+    id: 'project7',
   },
   {
     name: 'Rentomator',
@@ -89,7 +109,7 @@ export const PROJECTS: Project[] = [
     description:
       'AI-powered rental management platform for landlords. Centralizes property operations including tenant management, lease tracking, rent payments, and maintenance requests. Features AI photo inspections that compare property conditions at move-in/move-out with automated reports.',
     links: [
-      { label: 'Website', href: 'https://rentomator.com/?src=rahulmx.com&path=/#projects' },
+      { label: 'Website', href: 'https://rentomator.com/?src=rahulmx.com&section=projects' },
     ],
     tag: 'Next.js, React, Vercel, Cloudflare R2, Cloudflare Workers, Cloudflare D1',
     year: '2023',
